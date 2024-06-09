@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
-import Navigation from "./components/pages/Auth/Navigation";
-import { ToastContainer } from "react-toastify"; // Corrected package name
-import "react-toastify/dist/ReactToastify.css"; // Corrected package name
+import Navigation from "./pages/Auth/Navigation";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
@@ -9,7 +9,7 @@ function App() {
       <ToastContainer />
       <Navigation />
       <main className="py-3">
-      <Outlet/>
+        <Outlet />
       </main>
     </>
   );
