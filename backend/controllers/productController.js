@@ -20,8 +20,7 @@ const addProduct = asyncHandler(async (req, res) => {
             case !quantity:
                 return res.json({ error: "Quantity is required" });
         }
-
-        const product = new Product({ ...req.fields });
+        const product = new Product({ ...req.fields, vendor: req.user._id });
         await product.save();
         res.json(product);
     } catch (error) {
@@ -67,7 +66,6 @@ const updateProductDetails = asyncHandler(async (req, res) => {
 
 const removeProduct = asyncHandler(async (req, res) => {
     try {
-
         const product = await Product.findByIdAndDelete(req.params.id);
         res.json(product);
     } catch (error) {

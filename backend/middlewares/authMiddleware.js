@@ -5,7 +5,6 @@ import asyncHandler from "./asyncHandler.js";
 const authenticate = asyncHandler(async (req, res, next) => {
     let token;
 
-    // Read JWT from the 'jwt' cookie
     token = req.cookies.jwt;
 
     if (token) {
@@ -24,11 +23,18 @@ const authenticate = asyncHandler(async (req, res, next) => {
 });
 
 const authorizeAdmin = (req, res, next) => {
-    if (req.user && req.user.isAdmin) {
+    if (req.user && req.user.role === 'admin') {
         next();
     } else {
         res.status(401).send("Not authorized as an admin.");
     }
 };
+const authorizeVendor = (req, res, next) => {
+    if (req.user && req.user.role === 'vendor') {
+        next();
+    } else {
+        res.status(401).send("Not authorized as a vendor.");
+    }
+};
 
-export { authenticate, authorizeAdmin };
+export { authenticate, authorizeAdmin, authorizeVendor };
