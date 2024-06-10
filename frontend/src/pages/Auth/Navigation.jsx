@@ -12,8 +12,8 @@ import { useNavigate } from "react-router-dom";
 import "./Navigation.css";
 
 import { useSelector, useDispatch } from "react-redux";
-import { useLoginMutation } from "../../redux/api/userApiSlice";
-import { logout } from '../../redux/Features/auth/authSlice';
+// import { useLogoutMutation } from "../../redux/api/usersApiSlice";
+import { logout } from "../../redux/Features/auth/authSlice";
 
 // import FavoritesCount from "../Products/FavoritesCount";
 
@@ -28,31 +28,32 @@ const Navigation = () => {
   };
   const toggleSidebar = () => {
     setShowSidebar(!showSidebar);
-  }
+  };
   const closeSidebar = () => {
     setShowSidebar(false);
-  }
+  };
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   // const [logoutApiCall] = useLogoutMutation();
 
-  const logoutHandler = async () => {
-    try {
-      await logoutApiCall().unwrap();
-      dispatch(logout());
-      navigate("/login");
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  // const logoutHandler = async () => {
+  //   try {
+  //     await logoutApiCall().unwrap();
+  //     dispatch(logout());
+  //     navigate("/login");
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   return (
     <div
       style={{ zIndex: 9999 }}
-      className={`${showSidebar ? "hidden" : "flex"
-        } xl:flex lg:flex md:hidden sm:hidden flex-col justify-between p-4 text-white bg-[#000] w-[4%] hover:w-[15%] h-[100vh]  fixed `}
+      className={`${
+        showSidebar ? "hidden" : "flex"
+      } xl:flex lg:flex md:hidden sm:hidden flex-col justify-between p-4 text-white bg-[#000] w-[4%] hover:w-[15%] h-[100vh]  fixed `}
       id="navigation-container"
     >
       <div className="flex flex-col justify-center space-y-4">
