@@ -9,6 +9,8 @@ import {
     deleteUserById,
     getUserById,
     updateUserById,
+    getVendors,
+    deleteVendorById
 } from "../controllers/userController.js";
 
 import { authenticate, authorizeAdmin } from "../middlewares/authMiddleware.js";
@@ -19,7 +21,7 @@ router
     .route("/")
     .post(createUser)
     .get(authenticate, authorizeAdmin, getAllUsers);
-    
+
 router.post("/auth", loginUser);
 router.post("/logout", logoutCurrentUser);
 
@@ -34,5 +36,8 @@ router
     .delete(authenticate, authorizeAdmin, deleteUserById)
     .get(authenticate, authorizeAdmin, getUserById)
     .put(authenticate, authorizeAdmin, updateUserById);
+
+router.get("/vendors", authenticate, authorizeAdmin, getVendors);
+router.delete('/vendors/:id', authenticate, authorizeAdmin, deleteVendorById)
 
 export default router;

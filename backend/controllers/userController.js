@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs";
 import createToken from "../utils/createToken.js";
 
 const createUser = asyncHandler(async (req, res) => {
-    const { username, email, password } = req.body;
+    const { username, email, password, role } = req.body;
 
     if (!username || !email || !password) {
         throw new Error("Please fill all the inputs.");
@@ -20,7 +20,7 @@ const createUser = asyncHandler(async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    const newUser = new User({ username, email, password: hashedPassword });
+    const newUser = new User({ username, email, password: hashedPassword, role });
 
     try {
         await newUser.save();
@@ -30,7 +30,7 @@ const createUser = asyncHandler(async (req, res) => {
             _id: newUser._id,
             username: newUser.username,
             email: newUser.email,
-            isAdmin: newUser.isAdmin,
+            role: newUser.role,
         });
     } catch (error) {
         res.status(400);
@@ -68,7 +68,7 @@ const loginUser = asyncHandler(async (req, res) => {
                 _id: existingUser._id,
                 username: existingUser.username,
                 email: existingUser.email,
-                isAdmin: existingUser.isAdmin,
+                role: existingUser.role,
             }
 
             );
@@ -126,7 +126,7 @@ const updateCurrentUserProfile = asyncHandler(async (req, res) => {
             _id: updatedUser._id,
             username: updatedUser.username,
             email: updatedUser.email,
-            isAdmin: updatedUser.isAdmin,
+            role: updatedUser.role,
         });
     } else {
         res.status(404);
@@ -138,7 +138,7 @@ const deleteUserById = asyncHandler(async (req, res) => {
     const user = await User.findById(req.params.id);
 
     if (user) {
-        if (user.isAdmin) {
+        if (user.role) {
             res.status(400);
             throw new Error("Cannot delete admin user");
         }
@@ -168,7 +168,7 @@ const updateUserById = asyncHandler(async (req, res) => {
     if (user) {
         user.username = req.body.username || user.username;
         user.email = req.body.email || user.email;
-        user.isAdmin = Boolean(req.body.isAdmin);
+        user.role = Boolean(req.body.role);
 
         const updatedUser = await user.save();
 
@@ -176,13 +176,35 @@ const updateUserById = asyncHandler(async (req, res) => {
             _id: updatedUser._id,
             username: updatedUser.username,
             email: updatedUser.email,
-            isAdmin: updatedUser.isAdmin,
+            role: updatedUser.role,
         });
     } else {
         res.status(404);
         throw new Error("User not found");
     }
 });
+const getVendors = asyncHandler(async (res, req) => {
+    try {
+        const vendors = await User.find({ role: 'vendor' });
+        res.json(vendors);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: error.message });
+    }
+})
+
+const deleteVendorById = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.params.id);
+
+    if (user && user.role === 'vendor') {
+
+        await User.deleteOne({ _id: user._id });
+        res.json({ message: "Vendor removed" });
+    } else {
+        res.status(404);
+        throw new Error("Vendor not found.");
+    }
+})
 
 export {
     createUser,
@@ -194,4 +216,6 @@ export {
     deleteUserById,
     getUserById,
     updateUserById,
+    getVendors,
+    deleteVendorById
 };

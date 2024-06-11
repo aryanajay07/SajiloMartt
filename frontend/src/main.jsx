@@ -17,9 +17,11 @@ import CategoryList from "./pages/Admin/CategoryList.jsx";
 import ProductList from "./pages/Admin/ProductList.jsx";
 import AllProducts from "./pages/Admin/AllProducts.jsx";
 
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
+
       <Route path="/login" element={<Login />} />
       <Route path="/Register" element={<Register />} />
 
@@ -34,7 +36,10 @@ const router = createBrowserRouter(
         <Route path="categorylist" element={<CategoryList />} />
         <Route path="productlist" element={<ProductList />}/>   
         <Route path="all-products" element={<AllProducts />} />
-      </Route>
+     
+
+      {/* AdminRoute */}
+     </Route>
     </Route>
   )
 );

@@ -10,15 +10,14 @@ import { FaHeart } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import "./Navigation.css";
-
 import { useSelector, useDispatch } from "react-redux";
-// import { useLogoutMutation } from "../../redux/api/usersApiSlice";
+import { useLogoutMutation } from "../../redux/api/usersApiSlice";
 import { logout } from "../../redux/Features/auth/authSlice";
-
 // import FavoritesCount from "../Products/FavoritesCount";
 
 const Navigation = () => {
   const { userInfo } = useSelector((state) => state.auth);
+  // const { cartItems } = useSelector((state) => state.cart);
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false);
@@ -26,34 +25,28 @@ const Navigation = () => {
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
   };
-  const toggleSidebar = () => {
-    setShowSidebar(!showSidebar);
-  };
-  const closeSidebar = () => {
-    setShowSidebar(false);
-  };
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // const [logoutApiCall] = useLogoutMutation();
+  const [logoutApiCall] = useLogoutMutation();
 
-  // const logoutHandler = async () => {
-  //   try {
-  //     await logoutApiCall().unwrap();
-  //     dispatch(logout());
-  //     navigate("/login");
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
+  const logoutHandler = async () => {
+    try {
+      await logoutApiCall().unwrap();
+      dispatch(logout());
+      navigate("/login");
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div
       style={{ zIndex: 9999 }}
-      className={`${
-        showSidebar ? "hidden" : "flex"
-      } xl:flex lg:flex md:hidden sm:hidden flex-col justify-between p-4 text-white bg-[#000] w-[4%] hover:w-[15%] h-[100vh]  fixed `}
+      className={`${showSidebar ? "hidden" : "flex"
+
+        } xl:flex lg:flex md:hidden sm:hidden flex-col justify-between p-4 text-white bg-[#000] w-[4%] hover:w-[15%] h-[100vh]  fixed `}
       id="navigation-container"
     >
       <div className="flex flex-col justify-center space-y-4">
@@ -102,9 +95,10 @@ const Navigation = () => {
       </div>
 
       <div className="relative">
-        {/* <button
+        <button
           onClick={toggleDropdown}
-          className="flex items-center text-gray-800 focus:outline-none" >
+          className="flex items-center text-gray-800 focus:outline-none"
+        >
           {userInfo ? (
             <span className="text-white">{userInfo.username}</span>
           ) : (
@@ -127,14 +121,14 @@ const Navigation = () => {
               />
             </svg>
           )}
-        </button> */}
+        </button>
 
-        {/* {dropdownOpen && userInfo && (
+        {dropdownOpen && userInfo && (
           <ul
-            className={`absolute right-0 mt-2 mr-14 space-y-2 bg-white text-gray-600 ${!userInfo.isAdmin ? "-top-20" : "-top-80"
+            className={`absolute right-0 mt-2 mr-14 space-y-2 bg-white text-gray-600 ${!(userInfo.role === "admin") ? "-top-20" : "-top-80"
               } `}
           >
-            {userInfo.isAdmin && (
+            {userInfo.role === "admin" && (
               <>
                 <li>
                   <Link
@@ -193,7 +187,7 @@ const Navigation = () => {
               </button>
             </li>
           </ul>
-        )} */}
+        )}
         {!userInfo && (
           <ul>
             <li>
