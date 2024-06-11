@@ -125,10 +125,10 @@ const Navigation = () => {
 
         {dropdownOpen && userInfo && (
           <ul
-            className={`absolute right-0 mt-2 mr-14 space-y-2 bg-white text-gray-600 ${!(userInfo.role === "admin") ? "-top-20" : "-top-80"
+            className={`absolute right-0 mt-2 mr-14 space-y-1 bg-white text-gray-600 ${(userInfo.role === "customer") ? "-top-20" : "-top-80"
               } `}
           >
-            {userInfo.role === "admin" && (
+            {!(userInfo.role === "customer") && (
               <>
                 <li>
                   <Link
@@ -140,7 +140,7 @@ const Navigation = () => {
                 </li>
                 <li>
                   <Link
-                    to="/admin/productlist"
+                    to="/admin/allproductslist"
                     className="block px-4 py-2 hover:bg-gray-100"
                   >
                     Products
@@ -162,14 +162,14 @@ const Navigation = () => {
                     Orders
                   </Link>
                 </li>
-                <li>
+                {userInfo.role === "admin" && (<li>
                   <Link
                     to="/admin/userlist"
                     className="block px-4 py-2 hover:bg-gray-100"
                   >
                     Users
                   </Link>
-                </li>
+                </li>)}
               </>
             )}
 

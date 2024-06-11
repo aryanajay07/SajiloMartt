@@ -9,7 +9,7 @@ import {
 } from "../../redux/api/usersApiSlice";
 import { toast } from "react-toastify";
 // ⚠️⚠️⚠️ don't forget this ⚠️⚠️⚠️⚠️
-// import AdminMenu from "./AdminMenu";
+import AdminMenu from "./AdminMenu";
 
 const UserList = () => {
   const { data: users, refetch, isLoading, error } = useGetUsersQuery();
@@ -68,14 +68,14 @@ const UserList = () => {
         </Message>
       ) : (
         <div className="flex flex-col md:flex-row">
-          {/* <AdminMenu /> */}
+          <AdminMenu />
           <table className="w-full md:w-4/5 mx-auto">
             <thead>
               <tr>
                 <th className="px-4 py-2 text-left">ID</th>
                 <th className="px-4 py-2 text-left">NAME</th>
                 <th className="px-4 py-2 text-left">EMAIL</th>
-                <th className="px-4 py-2 text-left">ADMIN</th>
+                <th className="px-4 py-2 text-left">ROLE</th>
                 <th className="px-4 py-2"></th>
               </tr>
             </thead>
@@ -142,14 +142,17 @@ const UserList = () => {
                     )}
                   </td>
                   <td className="px-4 py-2">
-                    {user.isAdmin ? (
+                    {user.role}
+                  </td>
+                  {/* <td className="px-4 py-2">
+                    {(user.role == "admin") ? (
                       <FaCheck style={{ color: "green" }} />
                     ) : (
                       <FaTimes style={{ color: "red" }} />
                     )}
-                  </td>
+                  </td> */}
                   <td className="px-4 py-2">
-                    {!user.isAdmin && (
+                    {!(user.role == "admin") && (
                       <div className="flex">
                         <button
                           onClick={() => deleteHandler(user._id)}

@@ -36,5 +36,14 @@ const authorizeVendor = (req, res, next) => {
         res.status(401).send("Not authorized as a vendor.");
     }
 };
+const authorizeVendorOrAdmin = (req, res, next) => {
+    if (req.user && !(req.user.role === 'customer')) {
+        next();
+    } else {
+        res.status(401).send("Not authorized as an admin or vendor.");
+    }
+};
 
-export { authenticate, authorizeAdmin, authorizeVendor };
+
+
+export { authenticate, authorizeAdmin, authorizeVendor, authorizeVendorOrAdmin };

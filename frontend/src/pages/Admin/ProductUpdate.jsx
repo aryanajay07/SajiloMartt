@@ -74,7 +74,9 @@ const AdminProductUpdate = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
+      // Ensure these variables are defined
       const formData = new FormData();
       formData.append("image", image);
       formData.append("name", name);
@@ -86,10 +88,10 @@ const AdminProductUpdate = () => {
       formData.append("countInStock", stock);
 
       // Update product using the RTK Query mutation
-      const data = await updateProduct({ productId: params._id, formData });
+      const response = await updateProduct({ productId: params._id, formData });
 
-      if (data?.error) {
-        toast.error(data.error, {
+      if (response?.error) {
+        toast.error(response.error, {
           position: toast.POSITION.TOP_RIGHT,
           autoClose: 2000,
         });
@@ -101,14 +103,13 @@ const AdminProductUpdate = () => {
         navigate("/admin/allproductslist");
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
       toast.error("Product update failed. Try again.", {
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 2000,
       });
     }
   };
-
   const handleDelete = async () => {
     try {
       let answer = window.confirm(
