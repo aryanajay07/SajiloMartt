@@ -11,6 +11,8 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [role, setRole] = useState("customer");
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -36,7 +38,12 @@ const Register = () => {
       toast.error("Passwords do not match");
     } else {
       try {
-        const res = await register({ username, email, password }).unwrap();
+        const res = await register({
+          username,
+          email,
+          password,
+          role,
+        }).unwrap();
         dispatch(setCredentials({ ...res }));
         navigate(redirect);
         toast.success("User successfully registered");
@@ -47,10 +54,45 @@ const Register = () => {
     }
   };
 
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
+  };
+
+  const selectRole = (selectedRole) => {
+    setRole(selectedRole);
+    setDropdownOpen(false);
+  };
+
   return (
     <section className="pl-[10rem] flex flex-wrap">
       <div className="mr-[4rem] mt-[5rem]">
-        <h1 className="text-2xl font-semibold mb-4">Register</h1>
+        <div className="flex items-center justify-between mb-4">
+          <h1 className="text-2xl font-semibold">Register</h1>
+          <div className="relative">
+            <button
+              onClick={toggleDropdown}
+              className="bg-blue-500 text-white px-4 py-2 rounded-md focus:outline-none"
+            >
+              Register as {role}
+            </button>
+            {dropdownOpen && (
+              <div className="absolute right-0 mt-2 w-48 bg-white border rounded-md shadow-lg z-10">
+                <button
+                  onClick={() => selectRole("customer")}
+                  className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-200"
+                >
+                  Customer
+                </button>
+                <button
+                  onClick={() => selectRole("vendor")}
+                  className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-200"
+                >
+                  Vendor
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
 
         <form onSubmit={submitHandler} className="container w-[40rem]">
           <div className="my-[2rem]">
@@ -133,7 +175,7 @@ const Register = () => {
         </form>
 
         <div className="mt-4">
-          <p className="text-white">
+          <p className="text-black">
             Already have an account?{" "}
             <Link
               to={redirect ? `/login?redirect=${redirect}` : "/login"}
