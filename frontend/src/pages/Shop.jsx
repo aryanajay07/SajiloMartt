@@ -7,7 +7,7 @@ import {
   setCategories,
   setProducts,
   setChecked,
-} from "../redux/Features/Shop/shopSlice";
+} from "../redux/Features/shop/shopSlice";
 import Loader from "../components/Loader";
 import ProductCard from "./Products/ProductCard";
 
@@ -24,7 +24,6 @@ const Shop = () => {
     checked,
     radio,
   });
-
   useEffect(() => {
     if (!categoriesQuery.isLoading) {
       dispatch(setCategories(categoriesQuery.data));
