@@ -8,14 +8,12 @@ import { useFetchCategoriesQuery } from "../../redux/api/categoryApiSlice";
 import { toast } from "react-toastify";
 import AdminMenu from "./AdminMenu";
 
-import { useSelector } from 'react-redux';
-
 const ProductList = () => {
   const [image, setImage] = useState("");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState();
   const [quantity, setQuantity] = useState("");
   const [brand, setBrand] = useState("");
   const [stock, setStock] = useState(0);
@@ -26,12 +24,10 @@ const ProductList = () => {
   const [createProduct] = useCreateProductMutation();
   const { data: categories } = useFetchCategoriesQuery();
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-
       const productData = new FormData();
       productData.append("image", image);
       productData.append("name", name);
@@ -41,6 +37,7 @@ const ProductList = () => {
       productData.append("quantity", quantity);
       productData.append("brand", brand);
       productData.append("countInStock", stock);
+
       const { data } = await createProduct(productData);
 
       if (data.error) {

@@ -10,6 +10,28 @@ import {
 import { useFetchCategoriesQuery } from "../../redux/api/categoryApiSlice";
 import { toast } from "react-toastify";
 
+const handleDelete = async () => {
+  try {
+    let answer = window.confirm(
+      "Are you sure you want to delete this product?"
+    );
+    if (!answer) return;
+
+    const { data } = await deleteProduct(params._id);
+    toast.success(`"${data.name}" is deleted`, {
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 2000,
+    });
+    navigate("/admin/allproductslist");
+  } catch (err) {
+    console.log(err);
+    toast.error("Delete failed. Try again.", {
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 2000,
+    });
+  }
+};
+
 const AdminProductUpdate = () => {
   const params = useParams();
 
@@ -110,27 +132,7 @@ const AdminProductUpdate = () => {
       });
     }
   };
-  const handleDelete = async () => {
-    try {
-      let answer = window.confirm(
-        "Are you sure you want to delete this product?"
-      );
-      if (!answer) return;
 
-      const { data } = await deleteProduct(params._id);
-      toast.success(`"${data.name}" is deleted`, {
-        position: toast.POSITION.TOP_RIGHT,
-        autoClose: 2000,
-      });
-      navigate("/admin/allproductslist");
-    } catch (err) {
-      console.log(err);
-      toast.error("Delete failed. Try again.", {
-        position: toast.POSITION.TOP_RIGHT,
-        autoClose: 2000,
-      });
-    }
-  };
 
   return (
     <>
@@ -267,4 +269,5 @@ const AdminProductUpdate = () => {
   );
 };
 
+export { handleDelete };
 export default AdminProductUpdate;
