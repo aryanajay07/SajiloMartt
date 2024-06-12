@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { FaTimes } from "react-icons/fa";
+import { useSelector, useDispatch } from "react-redux";
+
 
 const AdminMenu = () => {
+  const { userInfo } = useSelector((state) => state.auth);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -12,9 +15,8 @@ const AdminMenu = () => {
   return (
     <>
       <button
-        className={`${
-          isMenuOpen ? "top-2 right-2" : "top-5 right-7"
-        } bg-[#151515] p-2 fixed rounded-lg`}
+        className={`${isMenuOpen ? "top-2 right-2" : "top-5 right-7"
+          } bg-[#151515] p-2 fixed rounded-lg`}
         onClick={toggleMenu}
       >
         {isMenuOpen ? (
@@ -53,7 +55,7 @@ const AdminMenu = () => {
                 Create Category
               </NavLink>
             </li>
-            <li>
+            {userInfo.role === "vendor" && (<li>
               <NavLink
                 className="list-item py-2 px-3  mb-5 hover:bg-[#2E2D2D] rounded-sm"
                 to="/admin/productlist"
@@ -61,9 +63,9 @@ const AdminMenu = () => {
                   color: isActive ? "greenyellow" : "white",
                 })}
               >
-                Create Product
+                Create new Product
               </NavLink>
-            </li>
+            </li>)}
             <li>
               <NavLink
                 className="list-item py-2 px-3  mb-5 hover:bg-[#2E2D2D] rounded-sm"

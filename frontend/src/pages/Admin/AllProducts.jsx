@@ -2,9 +2,11 @@ import { Link } from "react-router-dom";
 import moment from "moment";
 import { useAllProductsQuery } from "../../redux/api/productApiSlice";
 import AdminMenu from "./AdminMenu";
-
+import { useSelector, useDispatch } from "react-redux";
+import { handleDelete } from "./ProductUpdate";
 const AllProducts = () => {
   const { data: products, isLoading, isError } = useAllProductsQuery();
+  const { userInfo } = useSelector((state) => state.auth);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -26,7 +28,7 @@ const AllProducts = () => {
               {products.map((product) => (
                 <Link
                   key={product._id}
-                  to={`/admin/product/update/${product._id}`}
+                  to={`/product/${product._id}`}
                   className="block mb-4 overflow-hidden"
                 >
                   <div className="flex">
@@ -51,7 +53,7 @@ const AllProducts = () => {
                       </p>
 
                       <div className="flex justify-between">
-                        <Link
+                        {userInfo.role == "vendor" ? (<Link
                           to={`/admin/product/update/${product._id}`}
                           className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-pink-700 rounded-lg hover:bg-pink-800 focus:ring-4 focus:outline-none focus:ring-pink-300 dark:bg-pink-600 dark:hover:bg-pink-700 dark:focus:ring-pink-800"
                         >
@@ -71,7 +73,13 @@ const AllProducts = () => {
                               d="M1 5h12m0 0L9 1m4 4L9 9"
                             />
                           </svg>
-                        </Link>
+                        </Link>) :
+                          <button
+                            onClick={() => handleDelete}
+                            className="py-4 px-10 mt-5 rounded-lg text-lg font-bold  bg-pink-600"
+                          >
+                            Delete
+                          </button>}
                         <p>$ {product?.price}</p>
                       </div>
                     </div>
