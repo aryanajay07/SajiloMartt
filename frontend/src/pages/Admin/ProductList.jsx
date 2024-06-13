@@ -72,7 +72,23 @@ const ProductList = () => {
         <AdminMenu />
         <div className="md:w-3/4 p-3">
           <div className="h-12">Create Product</div>
+          <div className="flex justify-between">
 
+            <div>
+              <label htmlFor="">Category</label> <br />
+              <select
+                placeholder="Choose Category"
+                className="p-4 mb-3 w-[30rem] border rounded-lg bg-[#101011] text-white"
+                onChange={(e) => setCategory(e.target.value)}
+              >
+                {categories?.map((c) => (
+                  <option key={c._id} value={c._id}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
           {imageUrl && (
             <div className="text-center">
               <img
@@ -148,33 +164,6 @@ const ProductList = () => {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             ></textarea>
-
-            <div className="flex justify-between">
-              <div>
-                <label htmlFor="name block">Count In Stock</label> <br />
-                <input
-                  type="text"
-                  className="p-4 mb-3 w-[30rem] border rounded-lg bg-[#101011] text-white"
-                  value={stock}
-                  onChange={(e) => setStock(e.target.value)}
-                />
-              </div>
-
-              <div>
-                <label htmlFor="">Category</label> <br />
-                <select
-                  placeholder="Choose Category"
-                  className="p-4 mb-3 w-[30rem] border rounded-lg bg-[#101011] text-white"
-                  onChange={(e) => setCategory(e.target.value)}
-                >
-                  {categories?.map((c) => (
-                    <option key={c._id} value={c._id}>
-                      {c.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
 
             <button
               onClick={handleSubmit}

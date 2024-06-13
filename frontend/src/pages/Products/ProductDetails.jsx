@@ -19,7 +19,7 @@ import moment from "moment";
 import HeartIcon from "./HeartIcon";
 import Ratings from "./Ratings";
 import ProductTabs from "./ProductTabs";
-import { addToCart } from "../../redux/features/cart/cartSlice";
+import { addToCart } from "../../redux/Features/cart/cartSlice";
 
 const ProductDetails = () => {
   const { id: productId } = useParams();
@@ -39,8 +39,7 @@ const ProductDetails = () => {
 
   const { userInfo } = useSelector((state) => state.auth);
 
-  const [createReview, { isLoading: loadingProductReview }] =
-    useCreateReviewMutation();
+  const [createReview, { isLoading: loadingProductReview }] = useCreateReviewMutation();
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -98,6 +97,9 @@ const ProductDetails = () => {
               <p className="my-4 xl:w-[35rem] lg:w-[35rem] md:w-[30rem] text-[#B0B0B0]">
                 {product.description}
               </p>
+              <p className="my-4 xl:w-[35rem] lg:w-[35rem] md:w-[30rem] text-[#B0B0B0]">
+                Venor:{product.vendor.username}
+              </p>
 
               <p className="text-5xl my-4 font-extrabold">$ {product.price}</p>
 
@@ -119,11 +121,7 @@ const ProductDetails = () => {
 
                 <div className="two">
                   <h1 className="flex items-center mb-6">
-                    <FaStar className="mr-2 text-white" /> Ratings: {rating}
-                  </h1>
-                  <h1 className="flex items-center mb-6">
-                    <FaShoppingCart className="mr-2 text-white" /> Quantity:{" "}
-                    {product.quantity}
+                    <FaStar className="mr-2 text-white" /> Ratings: {product.rating}
                   </h1>
                   <h1 className="flex items-center mb-6 w-[10rem]">
                     <FaBox className="mr-2 text-white" /> In Stock:{" "}
@@ -157,10 +155,11 @@ const ProductDetails = () => {
 
               <div className="btn-container">
                 <button
-                  onClick={addToCartHandler}
+                  onClick={() => addToCartHandler}
                   disabled={product.countInStock === 0}
                   className="bg-pink-600 text-white py-2 px-4 rounded-lg mt-4 md:mt-0"
                 >
+                  <FaShoppingCart className="mr-2 x-1 text-white" />
                   Add To Cart
                 </button>
               </div>

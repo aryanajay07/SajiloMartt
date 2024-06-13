@@ -21,7 +21,7 @@ const productSchema = mongoose.Schema(
         image: { type: String, required: true },
         brand: { type: String, required: true },
         vendor: { type: ObjectId, required: true, ref: 'user' },
-        quantity: { type: Number, required: true },
+        quantity: { type: Number, required: true, default: 1 },
         category: { type: ObjectId, ref: "Category", required: true },
         description: { type: String, required: true },
         reviews: [reviewSchema],

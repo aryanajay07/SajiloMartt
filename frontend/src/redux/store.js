@@ -1,11 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query/react";
 import { apiSlice } from "./api/apiSlice";
-import authReducer from "./features/auth/authSlice";
-import favoritesReducer from "../redux/features/favorites/favoriteSlice";
-import cartSliceReducer from "../redux/features/cart/cartSlice";
-import shopReducer from "../redux/features/shop/shopSlice";
-import { getFavoritesFromLocalStorage } from "../Utils/localStorage";
+import authReducer from "./Features/auth/authSlice";
+import favoritesReducer from "../redux/Features/favorites/favoriteSlice";
+import cartSliceReducer from "../redux/Features/cart/cartSlice";
+import shopReducer from "../redux/Features/shop/shopSlice";
+import { getFavoritesFromLocalStorage } from "../utils/localStorage";
 
 const initialFavorites = getFavoritesFromLocalStorage() || [];
 

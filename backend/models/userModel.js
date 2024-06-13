@@ -22,10 +22,6 @@ const userSchema = mongoose.Schema(
             required: true,
             default: 'customer'
         },
-        isVeifiedVendor: {
-            type: Boolean,
-            default: false
-        }
     },
     { timestamps: true }
 );

@@ -10,27 +10,7 @@ import {
 import { useFetchCategoriesQuery } from "../../redux/api/categoryApiSlice";
 import { toast } from "react-toastify";
 
-const handleDelete = async () => {
-  try {
-    let answer = window.confirm(
-      "Are you sure you want to delete this product?"
-    );
-    if (!answer) return;
 
-    const { data } = await deleteProduct(params._id);
-    toast.success(`"${data.name}" is deleted`, {
-      position: toast.POSITION.TOP_RIGHT,
-      autoClose: 2000,
-    });
-    navigate("/admin/allproductslist");
-  } catch (err) {
-    console.log(err);
-    toast.error("Delete failed. Try again.", {
-      position: toast.POSITION.TOP_RIGHT,
-      autoClose: 2000,
-    });
-  }
-};
 
 const AdminProductUpdate = () => {
   const params = useParams();
@@ -46,10 +26,14 @@ const AdminProductUpdate = () => {
   );
   const [price, setPrice] = useState(productData?.price || "");
   const [category, setCategory] = useState(productData?.category || "");
-  const [quantity, setQuantity] = useState(productData?.quantity || "");
+  const [quantity, setQuantity] = useState(productData?.quantity || 0);
+  const [addQuantity, setAddQuantity] = useState(0);
+  const [sumQuantity, setSumQuantity] = useState(0);
   const [brand, setBrand] = useState(productData?.brand || "");
-  const [stock, setStock] = useState(productData?.countInStock);
 
+  useEffect(() => {
+    setSumQuantity(quantity + addQuantity);
+  }, [quantity, addQuantity]);
   // hook
   const navigate = useNavigate();
 
@@ -60,9 +44,6 @@ const AdminProductUpdate = () => {
 
   // Define the update product mutation
   const [updateProduct] = useUpdateProductMutation();
-
-  // Define the delete product mutation
-  const [deleteProduct] = useDeleteProductMutation();
 
   useEffect(() => {
     if (productData && productData._id) {
@@ -76,6 +57,31 @@ const AdminProductUpdate = () => {
     }
   }, [productData]);
 
+
+  // Define the delete product mutation
+  const [deleteProduct] = useDeleteProductMutation();
+
+  const handleDelete = async () => {
+    try {
+      let answer = window.confirm(
+        "Are you sure you want to delete this product?"
+      );
+      if (!answer) return;
+
+      const { data } = await deleteProduct(params._id);
+      toast.success(`"${data.name}" is deleted`, {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 2000,
+      });
+      navigate("/admin/allproductslist");
+    } catch (err) {
+      console.log(err);
+      toast.error("Delete failed. Try again.", {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 2000,
+      });
+    }
+  };
   const uploadFileHandler = async (e) => {
     const formData = new FormData();
     formData.append("image", e.target.files[0]);
@@ -87,7 +93,7 @@ const AdminProductUpdate = () => {
       });
       setImage(res.image);
     } catch (err) {
-      toast.success("Item added successfully", {
+      toast.success("Failed to add", {
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 2000,
       });
@@ -105,10 +111,8 @@ const AdminProductUpdate = () => {
       formData.append("description", description);
       formData.append("price", price);
       formData.append("category", category);
-      formData.append("quantity", quantity);
+      formData.append("quantity", sumQuantity);
       formData.append("brand", brand);
-      formData.append("countInStock", stock);
-
       // Update product using the RTK Query mutation
       const response = await updateProduct({ productId: params._id, formData });
 
@@ -164,7 +168,20 @@ const AdminProductUpdate = () => {
                 />
               </label>
             </div>
-
+            <div>
+              <label htmlFor="">Category</label> <br />
+              <select
+                placeholder="Choose Category"
+                className="p-4 mb-3 w-[30rem] border rounded-lg bg-[#101011] text-white mr-[5rem]"
+                onChange={(e) => setCategory(e.target.value)}
+              >
+                {categories?.map((c) => (
+                  <option key={c._id} value={c._id}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
+            </div>
             <div className="p-3">
               <div className="flex flex-wrap">
                 <div className="one">
@@ -190,13 +207,13 @@ const AdminProductUpdate = () => {
 
               <div className="flex flex-wrap">
                 <div>
-                  <label htmlFor="name block">Quantity</label> <br />
+                  <label htmlFor="name block">Add Quantity ({quantity}+)</label> <br />
                   <input
                     type="number"
                     min="1"
                     className="p-4 mb-3 w-[30rem] border rounded-lg bg-[#101011] text-white mr-[5rem]"
-                    value={quantity}
-                    onChange={(e) => setQuantity(e.target.value)}
+                    value={addQuantity}
+                    onChange={(e) => setAddQuantity(Number(e.target.value))}
                   />
                 </div>
                 <div>
@@ -221,30 +238,7 @@ const AdminProductUpdate = () => {
               />
 
               <div className="flex justify-between">
-                <div>
-                  <label htmlFor="name block">Count In Stock</label> <br />
-                  <input
-                    type="text"
-                    className="p-4 mb-3 w-[30rem] border rounded-lg bg-[#101011] text-white "
-                    value={stock}
-                    onChange={(e) => setStock(e.target.value)}
-                  />
-                </div>
 
-                <div>
-                  <label htmlFor="">Category</label> <br />
-                  <select
-                    placeholder="Choose Category"
-                    className="p-4 mb-3 w-[30rem] border rounded-lg bg-[#101011] text-white mr-[5rem]"
-                    onChange={(e) => setCategory(e.target.value)}
-                  >
-                    {categories?.map((c) => (
-                      <option key={c._id} value={c._id}>
-                        {c.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
               </div>
 
               <div className="">
@@ -269,5 +263,5 @@ const AdminProductUpdate = () => {
   );
 };
 
-export { handleDelete };
+// export { handleDelete };
 export default AdminProductUpdate;

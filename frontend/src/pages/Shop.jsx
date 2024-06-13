@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useGetFilteredProductsQuery } from "../redux/api/productApiSlice";
 import { useFetchCategoriesQuery } from "../redux/api/categoryApiSlice";
-
+import SearchProduct from "../components/SearchProduct";
 import {
   setCategories,
   setProducts,
@@ -82,7 +82,9 @@ const Shop = () => {
   return (
     <>
       <div className="container mx-auto">
+
         <div className="flex md:flex-row">
+
           <div className="bg-[#151515] p-3 mt-2 mb-2">
             <h2 className="h4 text-center py-2 bg-black rounded-full mb-2">
               Filter by Categories
@@ -162,7 +164,8 @@ const Shop = () => {
           </div>
 
           <div className="p-3">
-            <h2 className="h4 text-center mb-2">{products?.length} Products</h2>
+            <SearchProduct />
+            <h2 className="h4 text-center mb-2"> Products ({products?.length})</h2>
             <div className="flex flex-wrap">
               {products.length === 0 ? (
                 <Loader />

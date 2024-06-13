@@ -9,7 +9,7 @@ import {
 import Rating from "./Rating";
 import Loader from "../../components/Loader";
 import Message from "../../components/Message";
-import { addToCart } from "../../redux/features/cart/cartSlice";
+import { addToCart } from "../../redux/Features/cart/cartSlice";
 import {
   FaBox,
   FaClock,
@@ -119,10 +119,7 @@ const Product = () => {
                   <h1 className="flex items-center mb-6">
                     <FaStar className="mr-2 text-white" /> Ratings: {rating}
                   </h1>
-                  <h1 className="flex items-center mb-6">
-                    <FaShoppingCart className="mr-2 text-white" /> Quantity:{" "}
-                    {product.quantity}
-                  </h1>
+
                   <h1 className="flex items-center mb-6">
                     <FaBox className="mr-2 text-white" /> In Stock:{" "}
                     {product.countInStock}

@@ -4,6 +4,7 @@ import Loader from "../components/Loader";
 import Message from "../components/Message";
 import Header from "../components/Header";
 import Product from "./Products/Product";
+import SearchProduct from "../components/SearchProduct";
 
 const Home = () => {
   const { keyword } = useParams();
@@ -11,39 +12,37 @@ const Home = () => {
 
   return (
     <>
-      {!keyword ? <Header /> : null}
+      {!keyword && <Header />}
       {isLoading ? (
-        <Loader />
+        <div className="flex justify-center items-center min-h-screen">
+          <Loader />
+        </div>
       ) : isError ? (
-        <Message variant="danger">
-  {isError && (isError.data?.message || isError.error || "An unexpected error occurred")}
-</Message>
-
+        <div className="flex justify-center items-center min-h-screen">
+          <Message variant="danger">
+            {isError?.data?.message || isError?.error || "An unexpected error occurred"}
+          </Message>
+        </div>
       ) : (
-        <>
-          <div className="flex justify-between items-center">
-            <h1 className="ml-[20rem] mt-[10rem] text-[3rem]">
-              Special Products
-            </h1>
 
+        <div className="container mx-auto px-4 py-8">
+          <div className="flex justify-between items-center mb-8">
+            <SearchProduct />
+            <h1 className="text-4xl font-bold">Special Products</h1>
             <Link
               to="/shop"
-              className="bg-pink-600 font-bold rounded-full py-2 px-10 mr-[18rem] mt-[10rem]"
+              className="bg-pink-600 text-white font-bold rounded-full py-2 px-10 shadow-lg transform transition-transform hover:scale-105"
             >
               Shop
             </Link>
           </div>
 
-          <div>
-            <div className="flex justify-center flex-wrap mt-[2rem]">
-              {data.products.map((product) => (
-                <div key={product._id}>
-                  <Product product={product} />
-                </div>
-              ))}
-            </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {data.products.map((product) => (
+              <Product key={product._id} product={product} />
+            ))}
           </div>
-        </>
+        </div>
       )}
     </>
   );

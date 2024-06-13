@@ -14,6 +14,7 @@ import {
     fetchTopProducts,
     fetchNewProducts,
     filterProducts,
+    searchProducts,
 } from "../controllers/productController.js";
 import { authenticate, authorizeAdmin, authorizeVendor, authorizeVendorOrAdmin } from "../middlewares/authMiddleware.js";
 import checkId from "../middlewares/checkId.js";
@@ -32,9 +33,11 @@ router.get("/new", fetchNewProducts);
 router
     .route("/:id")
     .get(fetchProductById)
-    .put(authenticate, authorizeVendor, formidable(), updateProductDetails)
+    .put(authenticate, formidable(), updateProductDetails)
     .delete(authenticate, authorizeVendorOrAdmin, removeProduct);
 
 router.route("/filtered-products").post(filterProducts);
+
+router.get('/search/key', searchProducts);
 
 export default router;

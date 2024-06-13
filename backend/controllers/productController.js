@@ -20,7 +20,8 @@ const addProduct = asyncHandler(async (req, res) => {
             case !quantity:
                 return res.json({ error: "Quantity is required" });
         }
-        const product = new Product({ ...req.fields, vendor: req.user._id });
+        const countInStock = quantity;
+        const product = new Product({ ...req.fields, countInStock: countInStock, vendor: req.user._id });
         await product.save();
         res.json(product);
     } catch (error) {
@@ -103,6 +104,7 @@ const fetchProducts = asyncHandler(async (req, res) => {
 
 const fetchProductById = asyncHandler(async (req, res) => {
     try {
+
         const product = await Product.findById(req.params.id);
         if (product) {
             return res.json(product);
@@ -112,7 +114,7 @@ const fetchProductById = asyncHandler(async (req, res) => {
         }
     } catch (error) {
         console.error(error);
-        res.status(404).json({ error: "Product not found" });
+        res.status(404).json({ error: error.message });
     }
 });
 
@@ -208,6 +210,27 @@ const filterProducts = asyncHandler(async (req, res) => {
     }
 });
 
+const searchProducts = async (req, res) => {
+    const { keyword } = req.query;
+
+    try {
+        // Example of searching products by name, brand, and category using regex patterns
+        const products = await Product.find({
+            $or: [
+                { name: { $regex: new RegExp(keyword, 'i') } },
+                { brand: { $regex: new RegExp(keyword, 'i') } },
+                // { category: { $regex: new RegExp(keyword, 'i') } }
+            ]
+        });
+
+        res.json(products);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+
+
 export {
     addProduct,
     updateProductDetails,
@@ -219,4 +242,5 @@ export {
     fetchTopProducts,
     fetchNewProducts,
     filterProducts,
+    searchProducts
 };
