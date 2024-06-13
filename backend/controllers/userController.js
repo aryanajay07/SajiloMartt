@@ -218,5 +218,5 @@ export {
     getUserById,
     updateUserById,
     getVendors,
-    deleteVendorById
+    deleteVendorById,
 };

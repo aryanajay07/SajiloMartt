@@ -22,6 +22,7 @@ const Home = () => {
           <Message variant="danger">
             {isError?.data?.message || isError?.error || "An unexpected error occurred"}
           </Message>
+
         </div>
       ) : (
 

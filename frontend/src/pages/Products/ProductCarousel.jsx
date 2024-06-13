@@ -48,7 +48,6 @@ const ProductCarousel = () => {
               createdAt,
               numReviews,
               rating,
-              quantity,
               countInStock,
             }) => (
               <div key={_id}>
@@ -86,10 +85,6 @@ const ProductCarousel = () => {
                       <h1 className="flex items-center mb-6">
                         <FaStar className="mr-2 text-white" /> Ratings:{" "}
                         {Math.round(rating)}
-                      </h1>
-                      <h1 className="flex items-center mb-6">
-                        <FaShoppingCart className="mr-2 text-white" /> Quantity:{" "}
-                        {quantity}
                       </h1>
                       <h1 className="flex items-center mb-6">
                         <FaBox className="mr-2 text-white" /> In Stock:{" "}

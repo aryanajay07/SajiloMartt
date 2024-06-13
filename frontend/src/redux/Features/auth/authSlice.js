@@ -21,9 +21,15 @@ const authSlice = createSlice({
       state.userInfo = null;
       localStorage.clear();
     },
+    updateFavoriteCount: (state, action) => {
+      if (state.userInfo) {
+        state.userInfo.favoriteCount = action.payload;
+        localStorage.setItem("userInfo", JSON.stringify(state.userInfo));
+      }
+    },
   },
 });
 
-export const { setCredentials, logout } = authSlice.actions;
+export const { setCredentials, logout, updateFavoriteCount } = authSlice.actions;
 
 export default authSlice.reducer;

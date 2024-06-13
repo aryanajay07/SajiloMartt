@@ -37,6 +37,7 @@ const ProductDetails = () => {
     error,
   } = useGetProductDetailsQuery(productId);
 
+
   const { userInfo } = useSelector((state) => state.auth);
 
   const [createReview, { isLoading: loadingProductReview }] = useCreateReviewMutation();
@@ -98,7 +99,7 @@ const ProductDetails = () => {
                 {product.description}
               </p>
               <p className="my-4 xl:w-[35rem] lg:w-[35rem] md:w-[30rem] text-[#B0B0B0]">
-                Venor:{product.vendor.username}
+                Venor:{product.vendor}
               </p>
 
               <p className="text-5xl my-4 font-extrabold">$ {product.price}</p>

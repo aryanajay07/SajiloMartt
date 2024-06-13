@@ -1,5 +1,7 @@
 import asyncHandler from "../middlewares/asyncHandler.js";
 import Product from "../models/productModel.js";
+import User from "../models/userModel.js";
+
 
 const addProduct = asyncHandler(async (req, res) => {
     try {
@@ -104,7 +106,7 @@ const fetchProducts = asyncHandler(async (req, res) => {
 
 const fetchProductById = asyncHandler(async (req, res) => {
     try {
-
+        // const vendor = await User.findById(req.params.vendor);
         const product = await Product.findById(req.params.id);
         if (product) {
             return res.json(product);

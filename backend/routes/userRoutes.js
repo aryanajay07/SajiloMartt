@@ -10,7 +10,7 @@ import {
     getUserById,
     updateUserById,
     getVendors,
-    deleteVendorById
+    deleteVendorById,
 } from "../controllers/userController.js";
 
 import { authenticate, authorizeAdmin } from "../middlewares/authMiddleware.js";
@@ -38,6 +38,6 @@ router
     .put(authenticate, authorizeAdmin, updateUserById);
 
 router.get("/vendors", authenticate, authorizeAdmin, getVendors);
-router.delete('/vendors/:id', authenticate, authorizeAdmin, deleteVendorById)
+router.delete('/vendors/:id', authenticate, authorizeAdmin, deleteVendorById);
 
 export default router;

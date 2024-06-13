@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import {
   saveShippingAddress,
   savePaymentMethod,
-} from "../../redux/features/cart/cartSlice";
+} from "../../redux/Features/cart/cartSlice";
 import ProgressSteps from "../../components/ProgressSteps";
 
 const Shipping = () => {
@@ -100,7 +100,7 @@ const Shipping = () => {
                   onChange={(e) => setPaymentMethod(e.target.value)}
                 />
 
-                <span className="ml-2">PayPal or Credit Card</span>
+                <span className="ml-2">Khalti or Credit Card</span>
               </label>
             </div>
           </div>

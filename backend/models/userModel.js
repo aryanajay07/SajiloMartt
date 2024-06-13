@@ -22,6 +22,10 @@ const userSchema = mongoose.Schema(
             required: true,
             default: 'customer'
         },
+        favouriteCount: {
+            type: Number,
+            default: 0,
+        }
     },
     { timestamps: true }
 );
