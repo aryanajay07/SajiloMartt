@@ -15,7 +15,7 @@ const AdminMenu = () => {
   return (
     <>
       <button
-        className={`${isMenuOpen ? "top-2 right-2" : "top-5 right-7"
+        className={`${isMenuOpen ? "top-20 right-2" : "top-20 right-7"
           } bg-[#151515] p-2 fixed rounded-lg`}
         onClick={toggleMenu}
       >
@@ -31,7 +31,7 @@ const AdminMenu = () => {
       </button>
 
       {isMenuOpen && (
-        <section className="bg-[#151515] p-4 fixed right-7 top-5">
+        <section className="bg-[#151515]  p-4 fixed right-10 top-20">
           <ul className="list-none mt-2">
             <li>
               <NavLink
@@ -41,7 +41,7 @@ const AdminMenu = () => {
                   color: isActive ? "greenyellow" : "white",
                 })}
               >
-                Admin Dashboard
+                Sales Report
               </NavLink>
             </li>
             <li>
