@@ -164,7 +164,6 @@ const Shop = () => {
           </div>
 
           <div className="p-3">
-            <SearchProduct />
             <h2 className="h4 text-center mb-2"> Products ({products?.length})</h2>
             <div className="flex flex-wrap">
               {products.length === 0 ? (

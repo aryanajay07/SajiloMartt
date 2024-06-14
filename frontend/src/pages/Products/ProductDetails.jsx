@@ -102,7 +102,7 @@ const ProductDetails = () => {
                 Venor:{product.vendor}
               </p>
 
-              <p className="text-5xl my-4 font-extrabold">$ {product.price}</p>
+              <p className="text-5xl my-4 font-extrabold">Rs. {product.price}</p>
 
               <div className="flex items-center justify-between w-[20rem]">
                 <div className="one">
