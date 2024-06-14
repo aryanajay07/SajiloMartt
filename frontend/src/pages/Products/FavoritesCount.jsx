@@ -16,9 +16,9 @@ const FavoritesCount = () => {
   }, [dispatch, userInfo, favoriteCount]);
 
   return (
-    <div className="absolute left-2 top-8">
+    <div className=" ">
       {userInfo && favoriteCount > 0 && (
-        <span className="px-1 py-0 text-sm text-white bg-pink-500 rounded-full">
+        <span className="px-1.5 mr-2.5 absolute top-4  py-0 text-sm mb-0 text-white bg-pink-500 rounded-full">
           {favoriteCount}
         </span>
       )}
