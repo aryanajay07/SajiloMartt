@@ -36,15 +36,15 @@ const SearchProduct = () => {
     };
 
     return (
-        <div>
-            <form onSubmit={handleSubmit}>
-                <input
+        <div >
+            <form onSubmit={handleSubmit} >
+                <input className='text-black px-4 py-2 border rounded-lg outline-none focus:border-blue-600  hover:bg-slate-200 delay-200'
                     type="text"
                     value={keyword}
                     onChange={(e) => setKeyword(e.target.value)}
                     placeholder="Search Products..."
                 />
-                <button type="submit">Search</button>
+                <button className='p-1 px-3 ml-2 rounded-md bg-slate-200 text-black hover:bg-green-400 delay-200' type="submit">Search</button>
             </form>
 
 
