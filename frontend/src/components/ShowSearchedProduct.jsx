@@ -1,16 +1,17 @@
 import { Link, useLocation } from "react-router-dom";
 import moment from "moment";
 import AdminMenu from "../pages/Admin/AdminMenu";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 const ShowSearchedProduct = () => {
+    const { userInfo } = useSelector((state) => state.auth);
+
     const location = useLocation();
     const { products } = location.state || { products: [] };
 
     if (!products.length) {
         return <p>No products found.</p>;
     }
-    const { userInfo } = useSelector((state) => state.auth);
 
     return (
         <>

@@ -37,13 +37,12 @@ const Navigation = () => {
   };
 
   return (
-<<<<<<< HEAD
     <div className={` top-0 left-0 right-0 z-50 bg-[#000] p-4  text-white flex justify-between items-center ${showSidebar ? 'hidden' : 'block'}`}>
       <Link to="/" className="pl-20 text-xl font-bold tracking-widest ">
         SJILOMART
       </Link>
       <div>
-        <SearchProduct/>
+        <SearchProduct />
       </div>
 
       <div className="flex items-center  mx-4">
@@ -56,28 +55,8 @@ const Navigation = () => {
         </Link>
 
         <Link to="/cart" className="mr-4 relative px-2">
-=======
-    <div className={` top-0 left-0 right-0 z-50 bg-[#000] p-4 text-white flex justify-between items-center ${showSidebar ? 'hidden' : 'block'}`}>
-      <Link to="/" className="text-xl font-bold">
-        SAJILOMART
-      </Link>
-      <div>
-        <SearchProduct />
-      </div>
-
-      <div className="flex items-center">
-        <Link to="/" className="mr-4">
-          <AiOutlineHome size={24} />
-        </Link>
-
-        <Link to="/shop" className="mr-4">
-          <AiOutlineShopping size={24} />
-        </Link>
-
-        <Link to="/cart" className="mr-4 relative">
->>>>>>> 1bb78157be99966e21ecaf87e85ba2dd22cd9008
           <AiOutlineShoppingCart size={24} />
-          {cartItems.length > 0 && (
+          {userInfo && cartItems.length > 0 && (
             <span className="absolute -top-1 -right-1 bg-pink-500 text-white rounded-full px-2">
               {cartItems.reduce((total, item) => total + item.qty, 0)}
             </span>
@@ -86,11 +65,7 @@ const Navigation = () => {
 
         <Link to="/favorite" className="mr-4">
           <FaHeart size={24} />
-<<<<<<< HEAD
-          {/* <FavoritesCount /> */}
-=======
           <FavoritesCount />
->>>>>>> 1bb78157be99966e21ecaf87e85ba2dd22cd9008
         </Link>
 
         {userInfo ? (
@@ -108,20 +83,12 @@ const Navigation = () => {
               </svg>
             </button>
             {dropdownOpen && (
-<<<<<<< HEAD
               <ul className={`absolute top-10 right-0 bg-white text-gray-800 border  border-gray-200 rounded-md py-1 shadow-lg z-10 ${userInfo.role !== "customer" ? "-top-20" : "-top-80"}`}>
-=======
-              <ul className={`absolute top-10 right-0 bg-white text-gray-800 border border-gray-200 rounded-md py-1 shadow-lg z-10 ${userInfo.role !== "customer" ? "-top-20" : "-top-80"}`}>
->>>>>>> 1bb78157be99966e21ecaf87e85ba2dd22cd9008
                 {userInfo.role !== "customer" && (
                   <>
                     <li>
                       <Link to="/admin/dashboard" className="block px-4 py-2 hover:bg-gray-100">
-<<<<<<< HEAD
                         Dashboard
-=======
-                        Sales Report
->>>>>>> 1bb78157be99966e21ecaf87e85ba2dd22cd9008
                       </Link>
                     </li>
                     <li>
@@ -162,11 +129,7 @@ const Navigation = () => {
             )}
           </div>
         ) : (
-<<<<<<< HEAD
           <div className="flex px-2">
-=======
-          <div className="flex">
->>>>>>> 1bb78157be99966e21ecaf87e85ba2dd22cd9008
             <Link to="/login" className="mr-4">
               <AiOutlineLogin size={24} />
             </Link>

@@ -25,6 +25,11 @@ const userSchema = mongoose.Schema(
         favouriteCount: {
             type: Number,
             default: 0,
+        },
+        image: {
+            type: String,
+            required: true,
+            default: '/uploads/default.png',
         }
     },
     { timestamps: true }
