@@ -22,9 +22,9 @@ const AllProducts = () => {
             <div className="ml-[2rem] text-xl font-bold h-12">
               All Products ({products.length})
             </div>
-            <div className="flex-row flex-wrap justify-around items-center">
+            <div className="flex-row flex-wrap justify-around items-center pl-20">
               {products.map((product) => (
-                <div className="flex" key={product._id}>
+                <div className="flex mt-6" key={product._id}>
                   <img
                     src={product.image}
                     alt={product.name}
