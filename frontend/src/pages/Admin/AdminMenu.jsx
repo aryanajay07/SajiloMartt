@@ -77,7 +77,7 @@ const AdminMenu = () => {
                 All Products
               </NavLink>
             </li>
-            <li>
+            {userInfo.role === "admin" && <li>
               <NavLink
                 className="list-item py-2 px-3  mb-5 hover:bg-[#2E2D2D] rounded-sm"
                 to="/admin/userlist"
@@ -87,8 +87,8 @@ const AdminMenu = () => {
               >
                 Manage Users
               </NavLink>
-            </li>
-            <li>
+            </li>}
+            {userInfo.role === "vendor" && <li>
               <NavLink
                 className="list-item py-2 px-3  mb-5 hover:bg-[#2E2D2D] rounded-sm"
                 to="/admin/orderlist"
@@ -98,7 +98,7 @@ const AdminMenu = () => {
               >
                 Manage Orders
               </NavLink>
-            </li>
+            </li>}
           </ul>
         </section>
       )}

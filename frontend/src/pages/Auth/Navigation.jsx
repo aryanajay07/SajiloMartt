@@ -88,7 +88,7 @@ const Navigation = () => {
                   <>
                     <li>
                       <Link to="/admin/dashboard" className="block px-4 py-2 hover:bg-gray-100">
-                        Dashboard
+                        Sales Report
                       </Link>
                     </li>
                     <li>
@@ -101,11 +101,11 @@ const Navigation = () => {
                         Category
                       </Link>
                     </li>
-                    <li>
+                    {userInfo.role === "vendor" && <li>
                       <Link to="/admin/orderlist" className="block px-4 py-2 hover:bg-gray-100">
                         Orders
                       </Link>
-                    </li>
+                    </li>}
                     {userInfo.role === "admin" && (
                       <li>
                         <Link to="/admin/userlist" className="block px-4 py-2 hover:bg-gray-100">
