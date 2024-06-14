@@ -39,7 +39,7 @@ const Navigation = () => {
   return (
     <div className={` top-0 left-0 right-0 z-50 bg-[#000] p-4  text-white flex justify-between items-center ${showSidebar ? 'hidden' : 'block'}`}>
       <Link to="/" className="pl-20 text-xl font-bold tracking-widest ">
-        SJILOMART
+        SAJILOMART
       </Link>
       <div>
         <SearchProduct />
@@ -57,21 +57,23 @@ const Navigation = () => {
         <Link to="/cart" className="mr-4 relative px-2">
           <AiOutlineShoppingCart size={24} />
           {userInfo && cartItems.length > 0 && (
-            <span className="absolute -top-1 -right-1 bg-pink-500 text-white rounded-full px-2">
+            <span className="px-1.5 ml-3.5 absolute bottom-3  py-0 text-sm mb-0 text-white bg-pink-500 rounded-full">
               {cartItems.reduce((total, item) => total + item.qty, 0)}
             </span>
           )}
         </Link>
 
-        <Link to="/favorite" className="mr-4">
+        <Link to="/favorite" className="mr-4 flex">
+
           <FaHeart size={24} />
           <FavoritesCount />
         </Link>
 
         {userInfo ? (
           <div className="relative ml-4">
-            <button onClick={toggleDropdown} className="text-white">
-              {userInfo.username}
+            <button onClick={toggleDropdown} className="flex text-white ">
+              {userInfo.username}<div className="bg-green-400 h-5 w-5 ml-3  rounded-full">
+              </div>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className={`h-5 w-5 ml-1 ${dropdownOpen ? "transform rotate-180" : ""}`}
@@ -82,6 +84,7 @@ const Navigation = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={dropdownOpen ? "M5 15l7-7 7 7" : "M19 9l-7 7-7-7"} />
               </svg>
             </button>
+
             {dropdownOpen && (
               <ul className={`absolute top-10 right-0 bg-white text-gray-800 border  border-gray-200 rounded-md py-1 shadow-lg z-10 ${userInfo.role !== "customer" ? "-top-20" : "-top-80"}`}>
                 {userInfo.role !== "customer" && (
