@@ -167,7 +167,7 @@ const ProductDetails = () => {
                   Buy
                 </button>
               </div>}
-              {!userInfo && <div className="pl-20 flex items-center space-x-2"><Link to="/login" >Sign In</Link></div>}
+              {!userInfo && <div className="bg-pink-500 w-20 text-white px-2  py-2 rounded cursor-pointer my-[1rem]"><Link to="/login" >Sign In</Link></div>}
             </div>
 
             <div className="mt-[5rem] container flex flex-wrap items-start justify-between ml-[10rem]">

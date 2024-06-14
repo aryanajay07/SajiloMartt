@@ -24,40 +24,37 @@ const ProductTabs = ({
   }
 
   const handleTabClick = (tabNumber) => {
-    setActiveTab(tabNumber);
+    setActiveTab(activeTab === tabNumber ? null : tabNumber);
   };
 
   return (
     <div className="flex flex-col md:flex-row">
       <section className="mr-[5rem]">
-        <div
-          className={`flex-1 p-4 cursor-pointer text-lg ${
-            activeTab === 1 ? "font-bold" : ""
-          }`}
+        {(userInfo && userInfo.role === "customer") && <div
+          className={`flex-1 p-4 cursor-pointer text-lg ${activeTab === 1 ? "font-bold" : ""
+            }`}
           onClick={() => handleTabClick(1)}
         >
           Write Your Review
-        </div>
+        </div>}
         <div
-          className={`flex-1 p-4 cursor-pointer text-lg ${
-            activeTab === 2 ? "font-bold" : ""
-          }`}
+          className={`flex-1 p-4 cursor-pointer text-lg ${activeTab === 2 ? "font-bold" : ""
+            }`}
           onClick={() => handleTabClick(2)}
         >
-          All Reviews
+          {activeTab === 2 ? <h1>Close Reviews</h1> : <h1>All Reviews</h1>}
         </div>
-        <div
-          className={`flex-1 p-4 cursor-pointer text-lg ${
-            activeTab === 3 ? "font-bold" : ""
-          }`}
+        {userInfo && userInfo.role === "customer" && <div
+          className={`flex-1 p-4 cursor-pointer text-lg ${activeTab === 3 ? "font-bold" : ""
+            }`}
           onClick={() => handleTabClick(3)}
         >
           Related Products
-        </div>
+        </div>}
       </section>
 
       {/* Second Part */}
-      <section>
+      {userInfo && userInfo.role === "customer" && <section>
         {activeTab === 1 && (
           <div className="mt-4">
             {userInfo ? (
@@ -112,7 +109,7 @@ const ProductTabs = ({
             )}
           </div>
         )}
-      </section>
+      </section>}
 
       <section>
         {activeTab === 2 && (

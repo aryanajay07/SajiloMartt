@@ -5,7 +5,7 @@ import {
   useDeleteCategoryMutation,
   useFetchCategoriesQuery,
 } from "../../redux/api/categoryApiSlice";
-
+import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import CategoryForm from "../../components/CategoryForm";
 import Modal from "../../components/Modal";
@@ -21,6 +21,7 @@ const CategoryList = () => {
   const [createCategory] = useCreateCategoryMutation();
   const [updateCategory] = useUpdateCategoryMutation();
   const [deleteCategory] = useDeleteCategoryMutation();
+  const { userInfo } = useSelector((state) => state.auth)
 
   const handleCreateCategory = async (e) => {
     e.preventDefault();
@@ -89,7 +90,13 @@ const CategoryList = () => {
       toast.error("Category delection failed. Tray again.");
     }
   };
+  const handleClick = async (e) => {
+    userInfo.role === "admin" &&
 
+      setModalVisible(true);
+    setSelectedCategory(category);
+    setUpdatingName(category.name);
+  }
   return (
     <div className="ml-[10rem] flex flex-col md:flex-row">
       <AdminMenu />
@@ -110,9 +117,7 @@ const CategoryList = () => {
                 className="bg-white border border-pink-500 text-pink-500 py-2 px-4 rounded-lg m-3 hover:bg-pink-500 hover:text-white focus:outline-none foucs:ring-2 focus:ring-pink-500 focus:ring-opacity-50"
                 onClick={() => {
                   {
-                    setModalVisible(true);
-                    setSelectedCategory(category);
-                    setUpdatingName(category.name);
+
                   }
                 }}
               >
@@ -132,7 +137,7 @@ const CategoryList = () => {
           />
         </Modal>
       </div>
-    </div>
+    </div >
   );
 };
 

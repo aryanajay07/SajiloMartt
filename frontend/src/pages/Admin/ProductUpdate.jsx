@@ -130,7 +130,7 @@ const AdminProductUpdate = () => {
       }
     } catch (err) {
       console.error(err);
-      toast.error("Product update failed. Try again.", {
+      toast.error("Please select Category", {
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 2000,
       });
@@ -263,5 +263,4 @@ const AdminProductUpdate = () => {
   );
 };
 
-// export { handleDelete };
 export default AdminProductUpdate;

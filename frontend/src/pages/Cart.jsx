@@ -25,7 +25,7 @@ const Cart = () => {
 
   return (
     <>
-      <div>
+      <div className="ml-[10rem]">
         {userInfo ?
           (<div className="container flex justify-around items-start  wrap mx-auto mt-8">
             {cartItems.length === 0 ? (
@@ -111,9 +111,12 @@ const Cart = () => {
               </>
             )}
           </div>) :
-          (<div className="ml-10" >
-            You are not logged in.<Link className="text-blue-900 font-bold" to="/login">Sign In</Link>
-          </div>)}
+          <div className="ml-10 mt-4"> {/* Adjust margins for styling */}
+            You are not logged in.{' '}
+            <Link className="text-blue-900 font-bold" to="/login">
+              Sign In
+            </Link>
+          </div>}
       </div>
     </>
   );
