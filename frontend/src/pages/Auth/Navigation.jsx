@@ -39,7 +39,7 @@ const Navigation = () => {
   return (
     <div className={` top-0 left-0 right-0 z-50 bg-[#000] p-4  text-white flex justify-between items-center ${showSidebar ? 'hidden' : 'block'}`}>
       <Link to="/" className="pl-20 flex items-center space-x-2">
-        <img src="/uploads/logo.png" alt="SajiloMart Logo" className="h-8 w-auto" />
+        <img src="/uploads/logo.png" alt="SajiloMart Logo" className="h-8 w-auto rounded-full" />
         <span className="text-xl font-bold tracking-widest">SAJILOMART</span>
       </Link>
 

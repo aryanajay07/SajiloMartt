@@ -59,6 +59,9 @@ const ProductDetails = () => {
   };
 
   const buyProduct = (product, qty) => {
+    if (!userInfo) {
+      navigate("/login")
+    }
     dispatch(addToCart({ ...product, qty }));
     navigate("/cart")
   };
@@ -154,7 +157,7 @@ const ProductDetails = () => {
                 )}
               </div>
 
-              {userInfo.role === "customer" && <div className="btn-container">
+              {userInfo && userInfo.role === "customer" && <div className="btn-container">
                 <button
                   onClick={() => buyProduct(product, 1)}
                   disabled={product.countInStock === 0}
@@ -164,6 +167,7 @@ const ProductDetails = () => {
                   Buy
                 </button>
               </div>}
+              {!userInfo && <div className="pl-20 flex items-center space-x-2"><Link to="/login" >Sign In</Link></div>}
             </div>
 
             <div className="mt-[5rem] container flex flex-wrap items-start justify-between ml-[10rem]">
