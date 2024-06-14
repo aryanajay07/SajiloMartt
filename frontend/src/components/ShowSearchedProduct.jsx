@@ -10,7 +10,7 @@ const ShowSearchedProduct = () => {
     const { products } = location.state || { products: [] };
 
     if (!products.length) {
-        return <p>No products found.</p>;
+        return <div className="ml-20 " ><h1 className="text-red-500 bold">❌ No products found.</h1></div>
     }
 
     return (

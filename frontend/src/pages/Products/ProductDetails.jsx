@@ -19,7 +19,7 @@ import moment from "moment";
 import HeartIcon from "./HeartIcon";
 import Ratings from "./Ratings";
 import ProductTabs from "./ProductTabs";
-import { addToCart } from "../../redux/Features/cart/cartSlice";
+import { addToCart } from "../../redux/Features/Cart/cartSlice";
 
 const ProductDetails = () => {
   const { id: productId } = useParams();
@@ -58,9 +58,9 @@ const ProductDetails = () => {
     }
   };
 
-  const addToCartHandler = () => {
+  const buyProduct = (product, qty) => {
     dispatch(addToCart({ ...product, qty }));
-    navigate("/cart");
+    navigate("/cart")
   };
 
   return (
@@ -154,16 +154,16 @@ const ProductDetails = () => {
                 )}
               </div>
 
-              <div className="btn-container">
+              {userInfo.role === "customer" && <div className="btn-container">
                 <button
-                  onClick={() => addToCartHandler}
+                  onClick={() => buyProduct(product, 1)}
                   disabled={product.countInStock === 0}
                   className="bg-pink-600 text-white py-2 px-4 rounded-lg mt-4 md:mt-0"
                 >
                   <FaShoppingCart className="mr-2 x-1 text-white" />
-                  Add To Cart
+                  Buy
                 </button>
-              </div>
+              </div>}
             </div>
 
             <div className="mt-[5rem] container flex flex-wrap items-start justify-between ml-[10rem]">

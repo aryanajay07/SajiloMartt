@@ -2,8 +2,8 @@ import React from 'react';
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-900 text-white py-12  bottom-0">
-      <div className="container mx-auto px-4">
+    <footer className="bg-gray-900 text-white py-12 bottom-0   ">
+      <div className="container mx-auto px-4 ">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
           <div className="mb-8">
             <h3 className="text-lg font-bold mb-4">About Sajilomart</h3>
@@ -14,8 +14,8 @@ const Footer = () => {
           <div className="mb-8">
             <h3 className="text-lg font-bold mb-4">Quick Links</h3>
             <ul className="text-sm">
-              <li><a href="#">Home</a></li>
-              <li><a href="#">Shop</a></li>
+              <li><a href="/">Home</a></li>
+              <li><a href="/shop">Shop</a></li>
               <li><a href="#">About Us</a></li>
               <li><a href="#">Contact Us</a></li>
             </ul>
