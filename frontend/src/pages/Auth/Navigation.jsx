@@ -58,7 +58,7 @@ const Navigation = () => {
 
         <Link to="/cart" className="mr-4 relative px-2">
           <AiOutlineShoppingCart size={24} />
-          {userInfo && cartItems.length > 0 && (
+          {userInfo && userInfo.role === "customer" && cartItems.length > 0 && (
             <span className="px-1.5 ml-3.5 absolute bottom-3  py-0 text-sm mb-0 text-white bg-pink-500 rounded-full">
               {cartItems.reduce((total, item) => total + item.qty, 0)}
             </span>

@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useGetFilteredProductsQuery } from "../redux/api/productApiSlice";
 import { useFetchCategoriesQuery } from "../redux/api/categoryApiSlice";
-import SearchProduct from "../components/SearchProduct";
 import {
   setCategories,
   setProducts,
@@ -24,30 +23,37 @@ const Shop = () => {
     checked,
     radio,
   });
+
   useEffect(() => {
     if (!categoriesQuery.isLoading) {
       dispatch(setCategories(categoriesQuery.data));
     }
   }, [categoriesQuery.data, dispatch]);
 
-  useEffect(() => {
-    if (!checked.length || !radio.length) {
-      if (!filteredProductsQuery.isLoading) {
-        // Filter products based on both checked categories and price filter
-        const filteredProducts = filteredProductsQuery.data.filter(
-          (product) => {
-            // Check if the product price includes the entered price filter value
-            return (
-              product.price.toString().includes(priceFilter) ||
-              product.price === parseInt(priceFilter, 10)
-            );
-          }
-        );
+  const [hasProductsUnderPrice, setHasProductsUnderPrice] = useState(true);
 
-        dispatch(setProducts(filteredProducts));
+  useEffect(() => {
+    if (filteredProductsQuery.data) {
+      if (priceFilter && !isNaN(priceFilter)) {
+        const filterPrice = parseInt(priceFilter, 10);
+
+        const filteredProducts = filteredProductsQuery.data.filter((product) => {
+          const productPrice = parseInt(product.price, 10);
+          return productPrice <= filterPrice;
+        });
+
+        if (filteredProducts.length > 0) {
+          dispatch(setProducts(filteredProducts));
+          setHasProductsUnderPrice(true);
+        } else {
+          setHasProductsUnderPrice(false);
+        }
+      } else {
+        dispatch(setProducts(filteredProductsQuery.data));
+        setHasProductsUnderPrice(true);
       }
     }
-  }, [checked, radio, filteredProductsQuery.data, dispatch, priceFilter]);
+  }, [priceFilter, filteredProductsQuery.data, dispatch]);
 
   const handleBrandClick = (brand) => {
     const productsByBrand = filteredProductsQuery.data?.filter(
@@ -63,7 +69,6 @@ const Shop = () => {
     dispatch(setChecked(updatedChecked));
   };
 
-  // Add "All Brands" option to uniqueBrands
   const uniqueBrands = [
     ...Array.from(
       new Set(
@@ -75,16 +80,13 @@ const Shop = () => {
   ];
 
   const handlePriceChange = (e) => {
-    // Update the price filter state when the user types in the input filed
     setPriceFilter(e.target.value);
   };
 
   return (
     <>
       <div className="container mx-auto">
-
         <div className="flex md:flex-row">
-
           <div className="bg-[#151515] p-3 mt-2 mb-2">
             <h2 className="h4 text-center py-2 bg-black rounded-full mb-2">
               Filter by Categories
@@ -93,16 +95,16 @@ const Shop = () => {
             <div className="p-5 w-[15rem]">
               {categories?.map((c) => (
                 <div key={c._id} className="mb-2">
-                  <div className="flex ietms-center mr-4">
+                  <div className="flex items-center mr-4">
                     <input
                       type="checkbox"
-                      id="red-checkbox"
+                      id={`checkbox-${c._id}`}
                       onChange={(e) => handleCheck(e.target.checked, c._id)}
                       className="w-4 h-4 text-pink-600 bg-gray-100 border-gray-300 rounded focus:ring-pink-500 dark:focus:ring-pink-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                     />
 
                     <label
-                      htmlFor="pink-checkbox"
+                      htmlFor={`checkbox-${c._id}`}
                       className="ml-2 text-sm font-medium text-white dark:text-gray-300"
                     >
                       {c.name}
@@ -118,29 +120,27 @@ const Shop = () => {
 
             <div className="p-5">
               {uniqueBrands?.map((brand) => (
-                <>
-                  <div className="flex items-enter mr-4 mb-5">
-                    <input
-                      type="radio"
-                      id={brand}
-                      name="brand"
-                      onChange={() => handleBrandClick(brand)}
-                      className="w-4 h-4 text-pink-400 bg-gray-100 border-gray-300 focus:ring-pink-500 dark:focus:ring-pink-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                    />
+                <div key={brand} className="flex items-center mr-4 mb-5">
+                  <input
+                    type="radio"
+                    id={brand}
+                    name="brand"
+                    onChange={() => handleBrandClick(brand)}
+                    className="w-4 h-4 text-pink-400 bg-gray-100 border-gray-300 focus:ring-pink-500 dark:focus:ring-pink-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                  />
 
-                    <label
-                      htmlFor="pink-radio"
-                      className="ml-2 text-sm font-medium text-white dark:text-gray-300"
-                    >
-                      {brand}
-                    </label>
-                  </div>
-                </>
+                  <label
+                    htmlFor={brand}
+                    className="ml-2 text-sm font-medium text-white dark:text-gray-300"
+                  >
+                    {brand}
+                  </label>
+                </div>
               ))}
             </div>
 
             <h2 className="h4 text-center py-2 bg-black rounded-full mb-2">
-              Filer by Price
+              Filter by Price Limit
             </h2>
 
             <div className="p-5 w-[15rem]">
@@ -164,18 +164,26 @@ const Shop = () => {
           </div>
 
           <div className="p-3">
-            <h2 className="h4 text-center mb-2"> Products ({products?.length})</h2>
-            <div className="flex flex-wrap">
-              {products.length === 0 ? (
-                <Loader />
-              ) : (
-                products?.map((p) => (
-                  <div className="p-3" key={p._id}>
-                    <ProductCard p={p} />
-                  </div>
-                ))
-              )}
-            </div>
+            <h2 className="h4 text-center mb-2">
+              Products ({products?.length})
+            </h2>
+            {hasProductsUnderPrice ? (
+              <div className="flex flex-wrap">
+                {products.length === 0 ? (
+                  <Loader />
+                ) : (
+                  products?.map((p) => (
+                    <div className="p-3" key={p._id}>
+                      <ProductCard p={p} />
+                    </div>
+                  ))
+                )}
+              </div>
+            ) : (
+              <p className="text-red-200">
+                There are no products of price lesser than {priceFilter}.
+              </p>
+            )}
           </div>
         </div>
       </div>

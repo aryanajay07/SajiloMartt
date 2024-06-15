@@ -31,7 +31,7 @@ const ProductCard = ({ p }) => {
             style={{ height: "170px", objectFit: "cover" }}
           />
         </Link>
-        {userInfo.role === "customer" && <HeartIcon product={p} />}
+        {userInfo && userInfo.role === "customer" && <HeartIcon product={p} />}
       </section>
 
       <div className="p-5">
@@ -73,7 +73,7 @@ const ProductCard = ({ p }) => {
             </svg>
           </Link>
 
-          {userInfo.role === "customer" && <button
+          {userInfo && userInfo.role === "customer" && <button
             className="p-2 rounded-full"
             onClick={() => addToCartHandler(p, 1)}
           >
