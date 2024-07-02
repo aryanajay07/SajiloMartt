@@ -102,7 +102,7 @@ const ProductDetails = () => {
                 {product.description}
               </p>
               <p className="my-4 xl:w-[35rem] lg:w-[35rem] md:w-[30rem] text-[#B0B0B0]">
-                Venor:{product.vendor}
+                Venor:{product.vendor.username}
               </p>
 
               <p className="text-5xl my-4 font-extrabold">Rs. {product.price}</p>

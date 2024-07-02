@@ -20,7 +20,7 @@ const productSchema = mongoose.Schema(
         name: { type: String, required: true },
         image: { type: String, required: true },
         brand: { type: String, required: true },
-        vendor: { type: ObjectId, required: true, ref: 'user' },
+        vendor: { type: ObjectId, required: true, ref: 'User' },
         quantity: { type: Number, required: true, default: 1 },
         category: { type: ObjectId, ref: "Category", required: true },
         description: { type: String, required: true },

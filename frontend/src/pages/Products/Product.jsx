@@ -17,12 +17,12 @@ const Product = ({ product }) => {
         <div className="p-4  ">
           <h2 className="flex-col justify-center items-center">
             <div className="text-lg">{product.name}</div>
-            
+
             <span className="text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-pink-900 dark:text-pink-300">
               Rs. {product.price}
             </span>
             <span className=" text-pink-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded-full dark: dark:text-pink-300">
-              <h1>Vendor: {product.vendor}</h1> 
+              <h1>Vendor: {product.vendor.username}</h1>
             </span>
           </h2>
 
