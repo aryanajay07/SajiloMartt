@@ -1,34 +1,31 @@
-import React from 'react';
+// PaymentComponent.jsx
 
-const Payment = () => {
-    const handlePayment = async () => {
-        const response = await fetch('/api/initiate-payment', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                amount: 1000, // Amount in NPR
-                productIdentity: '123456',
-                productName: 'Product Name',
-                returnUrl: 'http://localhost:5000/verify-payment',
-                vendorPublicKey: 'VENDOR_PUBLIC_KEY'
-            })
-        });
+import React, { useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { initiatePayment } from '../redux/api/paymentSlice'; // Adjust path as per your project structure
 
-        const data = await response.json();
-        if (data.payment_url) {
-            window.location.href = data.payment_url;
-        } else {
-            alert('Payment initiation failed');
+const PaymentComponent = () => {
+    const dispatch = useDispatch();
+    const { pidx, payment_url } = useSelector((state) => state.payment); // Redux state where you store pidx and payment_url
+
+    const history = useHistory();
+
+    useEffect(() => {
+        dispatch(initiatePayment()); // Action to initiate payment, fetch pidx and payment_url
+    }, [dispatch]);
+
+    useEffect(() => {
+        if (payment_url) {
+            window.location.replace(payment_url); // Redirect user to Khalti payment page
         }
-    };
+    }, [payment_url]);
 
     return (
         <div>
-            <button onClick={handlePayment}>Pay with Khalti</button>
+            <p>Redirecting to Khalti payment page...</p>
         </div>
     );
 };
 
-export default Payment;
+export default PaymentComponent;

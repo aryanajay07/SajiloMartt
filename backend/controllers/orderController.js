@@ -143,7 +143,6 @@ const findOrderById = async (req, res) => {
     try {
         const order = await Order.findById(req.params.id).populate(
             "user",
-            "username email"
         );
 
         if (order) {
@@ -157,6 +156,39 @@ const findOrderById = async (req, res) => {
     }
 };
 
+const deleteOrders = async (req, res) => {
+    try {
+        await Order.deleteMany({});
+        res.json({ message: 'All Orders removed' });
+
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
+const deleteOrderById = async (req, res) => {
+    try {
+        const order = await Order.findById(req.params.id);
+        if (order) {
+            await order.deleteOne({ _id: order._id });
+            res.json({ message: 'Order removed' });
+
+        }
+        else { return res.status(404).json({ message: 'Order not found' }); }
+
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+const payOrder = async (req, res) => {
+    try {
+
+
+    } catch (error) {
+
+    }
+}
 const markOrderAsPaid = async (req, res) => {
     try {
         const order = await Order.findById(req.params.id);
@@ -168,7 +200,6 @@ const markOrderAsPaid = async (req, res) => {
                 id: req.body.id,
                 status: req.body.status,
                 update_time: req.body.update_time,
-                email_address: req.body.payer.email_address,
             };
 
             const updateOrder = await order.save();
@@ -209,6 +240,8 @@ export {
     calculateTotalSales,
     calcualteTotalSalesByDate,
     findOrderById,
+    deleteOrderById,
+    deleteOrders,
     markOrderAsPaid,
     markOrderAsDelivered,
 };

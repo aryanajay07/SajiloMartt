@@ -9,6 +9,7 @@ import {
     calculateTotalSales,
     calcualteTotalSalesByDate,
     findOrderById,
+    deleteOrderById, deleteOrders,
     markOrderAsPaid,
     markOrderAsDelivered,
 } from "../controllers/orderController.js";
@@ -25,7 +26,12 @@ router.route("/total-orders").get(countTotalOrders);
 router.route("/total-sales").get(calculateTotalSales);
 router.route("/total-sales-by-date").get(calcualteTotalSalesByDate);
 router.route("/:id").get(authenticate, findOrderById);
+router.route("/:id").delete(authenticate, deleteOrderById);
+router.route("/").delete(authenticate, deleteOrders);
+
 router.route("/:id/pay").put(authenticate, markOrderAsPaid);
+router.route("/:id/pay").post(authenticate, markOrderAsPaid);
+
 router
     .route("/:id/deliver")
     .put(authenticate, authorizeVendor, markOrderAsDelivered);

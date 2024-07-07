@@ -1,7 +1,6 @@
-
-  
-  import { apiSlice } from "./apiSlice";
-import { ORDERS_URL, PAYPAL_URL } from "../constants";
+import { apiSlice } from "./apiSlice";
+import { ORDERS_URL } from "../constants";
+import { deleteOrderById } from "../../../../backend/controllers/orderController";
 
 export const orderApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -24,12 +23,6 @@ export const orderApiSlice = apiSlice.injectEndpoints({
         url: `${ORDERS_URL}/${orderId}/pay`,
         method: "PUT",
         body: details,
-      }),
-    }),
-
-    getPaypalClientId: builder.query({
-      query: () => ({
-        url: PAYPAL_URL,
       }),
     }),
 
@@ -61,6 +54,13 @@ export const orderApiSlice = apiSlice.injectEndpoints({
       query: () => `${ORDERS_URL}/total-sales`,
     }),
 
+    deleteOrderById: builder.mutation({
+      query: (orderId) => ({
+        url: `${ORDERS_URL}/${orderId}`,
+        method: 'DELETE',
+      }),
+    }),
+
     getTotalSalesByDate: builder.query({
       query: () => `${ORDERS_URL}/total-sales-by-date`,
     }),
@@ -71,11 +71,10 @@ export const {
   useGetTotalOrdersQuery,
   useGetTotalSalesQuery,
   useGetTotalSalesByDateQuery,
-  // ------------------
   useCreateOrderMutation,
   useGetOrderDetailsQuery,
+  useDeleteOrderByIdMutation,
   usePayOrderMutation,
-  useGetPaypalClientIdQuery,
   useGetMyOrdersQuery,
   useDeliverOrderMutation,
   useGetOrdersQuery,

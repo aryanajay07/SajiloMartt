@@ -1,86 +1,76 @@
 import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-// import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-import Messsage from "../../components/Message";
+import Message from "../../components/Message";
 import Loader from "../../components/Loader";
+import { clearCartItems } from "../../redux/Features/cart/cartSlice"; // Ensure correct import path
+
+import KhaltiCheckout from "khalti-checkout-web"; // Import Khalti Checkout
+import { KHALTI_PUBLIC_KEY } from "../../redux/constants";
 import {
   useDeliverOrderMutation,
   useGetOrderDetailsQuery,
-  useGetPaypalClientIdQuery,
   usePayOrderMutation,
 } from "../../redux/api/orderApiSlice";
 
 const Order = () => {
   const { id: orderId } = useParams();
-
-  const {
-    data: order,
-    refetch,
-    isLoading,
-    error,
-  } = useGetOrderDetailsQuery(orderId);
-
+  const { data: order, refetch, isLoading, error } = useGetOrderDetailsQuery(orderId);
   const [payOrder, { isLoading: loadingPay }] = usePayOrderMutation();
-  const [deliverOrder, { isLoading: loadingDeliver }] =
-    useDeliverOrderMutation();
+  const [deliverOrder, { isLoading: loadingDeliver }] = useDeliverOrderMutation();
   const { userInfo } = useSelector((state) => state.auth);
-
-  const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
-
-  const {
-    data: paypal,
-    isLoading: loadingPaPal,
-    error: errorPayPal,
-  } = useGetPaypalClientIdQuery();
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!errorPayPal && !loadingPaPal && paypal.clientId) {
-      const loadingPaPalScript = async () => {
-        paypalDispatch({
-          type: "resetOptions",
-          value: {
-            "client-id": paypal.clientId,
-            currency: "USD",
+    if (order && !order.isPaid) {
+      const khaltiConfig = {
+        publicKey: KHALTI_PUBLIC_KEY,
+        productIdentity: order._id,
+        productName: "Order from SajiloMart",
+        productUrl: window.location.href,
+        eventHandler: {
+          onSuccess: (payload) => {
+            console.log("Khalti Success Payload:", payload);
+            if (!payload.idx) {
+              console.error("Missing payload properties:", payload);
+              toast.error("Invalid payment details received.");
+              return;
+            }
+            dispatch(clearCartItems());
+            payOrderHandler(payload);
           },
-        });
-        paypalDispatch({ type: "setLoadingStatus", value: "pending" });
+          onError: (error) => {
+            console.error("Khalti Error:", error);
+            toast.error("Payment failed. Please try again.");
+          },
+          onClose: () => {
+            console.log("Widget is closing");
+          },
+        },
+        paymentPreference: [
+          "KHALTI",
+          "EBANKING",
+          "MOBILE_BANKING",
+          "CONNECT_IPS",
+          "SCT",
+        ],
       };
 
-      if (order && !order.isPaid) {
-        if (!window.paypal) {
-          loadingPaPalScript();
-        }
-      }
+      const checkout = new KhaltiCheckout(khaltiConfig);
+      window.khaltiCheckout = checkout;
     }
-  }, [errorPayPal, loadingPaPal, order, paypal, paypalDispatch]);
+  }, [order]);
 
-  function onApprove(data, actions) {
-    return actions.order.capture().then(async function (details) {
-      try {
-        await payOrder({ orderId, details });
-        refetch();
-        toast.success("Order is paid");
-      } catch (error) {
-        toast.error(error?.data?.message || error.message);
-      }
-    });
-  }
-
-  function createOrder(data, actions) {
-    return actions.order
-      .create({
-        purchase_units: [{ amount: { value: order.totalPrice } }],
-      })
-      .then((orderID) => {
-        return orderID;
-      });
-  }
-
-  function onError(err) {
-    toast.error(err.message);
-  }
+  const payOrderHandler = async (payload) => {
+    try {
+      await payOrder({ orderId, details: payload });
+      refetch();
+      toast.success("Order is paid");
+    } catch (error) {
+      toast.error(error?.data?.message || error.message);
+    }
+  };
 
   const deliverHandler = async () => {
     await deliverOrder(orderId);
@@ -90,13 +80,13 @@ const Order = () => {
   return isLoading ? (
     <Loader />
   ) : error ? (
-    <Messsage variant="danger">{error.data.message}</Messsage>
+    <Message variant="danger">Cannot find order</Message>
   ) : (
     <div className="container flex flex-col ml-[10rem] md:flex-row">
       <div className="md:w-2/3 pr-4">
         <div className="border gray-300 mt-5 pb-4 mb-5">
           {order.orderItems.length === 0 ? (
-            <Messsage>Order is empty</Messsage>
+            <Message>Order is empty</Message>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-[80%]">
@@ -109,7 +99,6 @@ const Order = () => {
                     <th className="p-2">Total</th>
                   </tr>
                 </thead>
-
                 <tbody>
                   {order.orderItems.map((item, index) => (
                     <tr key={index}>
@@ -120,15 +109,13 @@ const Order = () => {
                           className="w-16 h-16 object-cover"
                         />
                       </td>
-
                       <td className="p-2">
                         <Link to={`/product/${item.product}`}>{item.name}</Link>
                       </td>
-
                       <td className="p-2 text-center">{item.qty}</td>
                       <td className="p-2 text-center">{item.price}</td>
                       <td className="p-2 text-center">
-                        $ {(item.qty * item.price).toFixed(2)}
+                        Rs {(item.qty * item.price).toFixed(2)}
                       </td>
                     </tr>
                   ))}
@@ -145,73 +132,52 @@ const Order = () => {
           <p className="mb-4 mt-4">
             <strong className="text-pink-500">Order:</strong> {order._id}
           </p>
-
           <p className="mb-4">
-            <strong className="text-pink-500">Name:</strong>{" "}
-            {order.user.username}
+            <strong className="text-pink-500">Name:</strong> {order.user.username}
           </p>
-
           <p className="mb-4">
-            <strong className="text-pink-500">Email:</strong> {order.user.email}
+            <strong className="text-pink-500">Address:</strong> {order.shippingAddress.address}, {order.shippingAddress.city} {order.shippingAddress.postalCode}, {order.shippingAddress.country}
           </p>
-
           <p className="mb-4">
-            <strong className="text-pink-500">Address:</strong>{" "}
-            {order.shippingAddress.address}, {order.shippingAddress.city}{" "}
-            {order.shippingAddress.postalCode}, {order.shippingAddress.country}
+            <strong className="text-pink-500">Method:</strong> {order.paymentMethod}
           </p>
-
-          <p className="mb-4">
-            <strong className="text-pink-500">Method:</strong>{" "}
-            {order.paymentMethod}
-          </p>
-
           {order.isPaid ? (
-            <Messsage variant="success">Paid on {order.paidAt}</Messsage>
+            <Message variant="success">Paid on {order.paidAt}</Message>
           ) : (
-            <Messsage variant="danger">Not paid</Messsage>
+            <Message variant="danger">Not paid</Message>
           )}
         </div>
-
         <h2 className="text-xl font-bold mb-2 mt-[3rem]">Order Summary</h2>
         <div className="flex justify-between mb-2">
           <span>Items</span>
-          <span>$ {order.itemsPrice}</span>
+          <span>Rs {order.itemsPrice}</span>
         </div>
         <div className="flex justify-between mb-2">
           <span>Shipping</span>
-          <span>$ {order.shippingPrice}</span>
+          <span>Rs {order.shippingPrice}</span>
         </div>
         <div className="flex justify-between mb-2">
           <span>Tax</span>
-          <span>$ {order.taxPrice}</span>
+          <span>Rs {order.taxPrice}</span>
         </div>
         <div className="flex justify-between mb-2">
           <span>Total</span>
-          <span>$ {order.totalPrice}</span>
+          <span>Rs{order.totalPrice}</span>
         </div>
-
         {!order.isPaid && (
           <div>
-            {loadingPay && <Loader />}{" "}
-            {isPending ? (
-              <Loader />
-            ) : (
-              <div>
-                <div>
-                  <PayPalButtons
-                    createOrder={createOrder}
-                    onApprove={onApprove}
-                    onError={onError}
-                  ></PayPalButtons>
-                </div>
-              </div>
-            )}
+            {loadingPay && <Loader />}
+            <button
+              type="button"
+              className="bg-pink-500 text-white w-full py-2"
+              onClick={() => window.khaltiCheckout.show({ amount: order.totalPrice * 100 })} // Khalti requires amount in paisa
+            >
+              Pay with Khalti
+            </button>
           </div>
         )}
-
         {loadingDeliver && <Loader />}
-        {userInfo && userInfo.isAdmin && order.isPaid && !order.isDelivered && (
+        {userInfo && userInfo.role === 'vendor' && order.isPaid && !order.isDelivered && (
           <div>
             <button
               type="button"
