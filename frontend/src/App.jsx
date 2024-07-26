@@ -9,10 +9,8 @@ function App() {
     <>
       <ToastContainer />
       <Navigation />
-      <main className="py-3 flex flex-col min-h-screen">
+      <main className="py-3 flex bg-neutral-900 text-white flex-col min-h-screen">
         <Outlet />
-
-
       </main>
       <Footer />
     </>

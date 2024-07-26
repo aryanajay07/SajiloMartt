@@ -71,7 +71,6 @@ const Order = () => {
     try {
       await payOrder({ orderId, details: payload });
       refetch();
-      // setSalesCount(salesCount + 1)
       toast.success("Order is paid");
     } catch (error) {
       toast.error(error?.data?.message || error.message);
@@ -86,6 +85,8 @@ const Order = () => {
 
   const cashOnDeliverHandler = async () => {
     setIsPaid(true);
+    await payOrder({ orderId, isPaid: true });
+    refetch();
     await deliverOrder(orderId);
     setDelievered(true)
     refetch();
@@ -99,14 +100,14 @@ const Order = () => {
   ) : error ? (
     <Message variant="danger">Cannot find order</Message>
   ) : (
-    <div className="container flex flex-col  md:flex-row">
+    <div className="container mx-auto flex flex-col ml-[5rem] md:flex-row">
       <div className="md:w-2/3 pr-4">
         <div className="border gray-300 mt-5 pb-4 mb-5">
           {order.orderItems.length === 0 ? (
             <Message>Order is empty</Message>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-[80%]">
+            <div className="overflow-x-auto pl-10 ">
+              <table className="w-[80%] ">
                 <thead className="border-b-2">
                   <tr>
                     <th className="p-2">Image</th>
@@ -141,12 +142,12 @@ const Order = () => {
             </div>
           )}
         </div>
-      </div>a
+      </div>
 
-      <div className="md:w-1/3 mx-auto flex flex-col mx-auto">
+      <div className="md:w-1/3  mx-auto flex flex-col mx-auto">
         <div className="mt-5 border-gray-300 pb-4 mb-4  mx-auto">
 
-          <h2 className="text-xl font-bold mb-2">Shipping</h2>
+          <h2 className="text-xl font-bold pb-4 mb-2">Shipping</h2>
           <p className="mb-4 mt-4">
             <strong className="text-pink-500">Order:</strong> {order._id}
           </p>
@@ -166,8 +167,8 @@ const Order = () => {
             <Message variant="danger">Not paid</Message>
           )}
         </div>
-        <h2 className="text-xl font-bold mb-2 mt-[3rem]">Order Summary</h2>
-        <div className="  mr-20 ">
+        <h2 className="text-xl font-bold mb-2 ml-20 pb-4 mt-[3rem]">Order Summary</h2>
+        <div className="  ml-20 ">
           <div className="flex justify-between mb-2">
             <span>Items</span>
             <span>Rs {order.itemsPrice}</span>
@@ -184,7 +185,7 @@ const Order = () => {
             <span>Total</span>
             <span>Rs{order.totalPrice}</span>
           </div>
-          {userInfo.role === "customer " && !order.isPaid && order.paymentMethod === "Khalti" ? (
+          {userInfo.role === "customer" && !order.isPaid && order.paymentMethod === "Khalti" ? (
             <div>
               {loadingPay && <Loader />}
               <button
@@ -198,19 +199,19 @@ const Order = () => {
           ) :
             <div>
               {loadingPay && <Loader />}
-              <button
+              {userInfo.role === "customer" && order.paymentMethod === "Cash On Delivery" && <button
                 type="button"
                 className="bg-pink-500 text-white w-full py-2"
                 onClick={cashOnDelievery}
               >
                 Cash On deleivery
-              </button>
+              </button>}
             </div>
           }
 
           {loadingDeliver && <Loader />}
 
-          {userInfo && userInfo.role === 'vendor' && order.isPaid && !order.isDelivered && (order.paymentMethod === "Khalti" ? (
+          {userInfo && userInfo.role === 'vendor' && order.isPaid && !order.isDelivered && order.paymentMethod === "Khalti" &&
             <div>
               <button
                 type="button"
@@ -219,8 +220,8 @@ const Order = () => {
               >
                 Mark As Delivered
               </button>
-            </div>
-          ) :
+            </div>}
+          {userInfo && userInfo.role === 'vendor' && !order.isPaid && !order.isDelivered && (order.paymentMethod === "Cash On Delivery") &&
             <div>
               <button
                 type="button"
@@ -229,13 +230,13 @@ const Order = () => {
               >
                 Recieved Cash and Delivered
               </button>
-            </div>)}
+            </div>}
           {userInfo && order.isPaid && order.isDelivered && (
             <Message variant="success">Delievered on {order.deliveredAt}</Message>
           )}
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 
