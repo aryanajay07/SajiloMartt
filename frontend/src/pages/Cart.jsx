@@ -25,7 +25,7 @@ const Cart = () => {
 
   return (
     <>
-      <div className="ml-[10rem]">
+      <div className="ml-[10rem] ">
         {userInfo ?
           (<div className="container flex justify-around items-start  wrap mx-auto mt-8">
             {cartItems.length === 0 ? (

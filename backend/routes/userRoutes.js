@@ -11,19 +11,23 @@ import {
     updateUserById,
     getVendors,
     deleteVendorById,
+    verifyOtp,
 } from "../controllers/userController.js";
 
-import { authenticate, authorizeAdmin } from "../middlewares/authMiddleware.js";
+import { authenticate, authorizeAdmin, authorizeVendorOrAdmin } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
 router
     .route("/")
     .post(createUser)
-    .get(authenticate, authorizeAdmin, getAllUsers);
+    .get(authenticate, authorizeVendorOrAdmin, getAllUsers);
 
 router.post("/auth", loginUser);
 router.post("/logout", logoutCurrentUser);
+
+router.post('/verify-otp', verifyOtp);
+
 
 router
     .route("/profile")
