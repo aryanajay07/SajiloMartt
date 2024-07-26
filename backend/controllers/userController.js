@@ -2,6 +2,36 @@ import User from "../models/userModel.js";
 import asyncHandler from "../middlewares/asyncHandler.js";
 import bcrypt from "bcryptjs";
 import createToken from "../utils/createToken.js";
+import jwt from 'jsonwebtoken';
+import nodemailer from 'nodemailer';
+
+
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'realajaryan@gmail.com',
+        pass: 'aryanajay',
+    },
+});
+
+const sendOtpEmail = (email, otp) => {
+    const mailOptions = {
+        from: 'realajaryan@gmail.com',
+        to: email,
+        subject: 'SajiloMart OTP Code',
+        text: `Your OTP code is ${otp}`,
+    };
+    console.log("after mailoptions")
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+        console.log("inside transportaer")
+
+    });
+};
 
 const createUser = asyncHandler(async (req, res) => {
     const { username, email, password, role } = req.body;

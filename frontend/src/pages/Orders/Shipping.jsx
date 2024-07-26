@@ -102,6 +102,7 @@ const Shipping = () => {
 
                 <span className="ml-2">Khalti </span>
               </label>
+
             </div>
             <div className="mt-2">
               <label className="inline-flex items-center">
