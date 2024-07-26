@@ -14,20 +14,16 @@ const AllProducts = () => {
   if (isError) {
     return <div>Error loading products</div>;
   }
-
-  const filteredProducts = products.filter((product) => {
-    return product.vendor === userInfo._id;
-  });
   return (
     <>
       <div className="container mx-[9rem]">
         <div className="flex flex-col  md:flex-row">
           <div className="p-3">
             <div className="ml-[2rem] text-xl font-bold h-12">
-              All Products ({filteredProducts.length})
+              All Products ({products.length})
             </div>
             <div className="flex-row flex-wrap justify-around items-center pl-20">
-              {filteredProducts.map((product) => (
+              {products.map((product) => (
                 <div className="flex mt-6" key={product._id}>
                   <img
                     src={product.image}
@@ -38,7 +34,6 @@ const AllProducts = () => {
                     <div className="flex justify-between">
                       <h5 className="text-xl font-semibold mb-2">
                         {product?.name}
-
                       </h5>
 
                       <p className="text-gray-400 text-xs">

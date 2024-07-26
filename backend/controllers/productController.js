@@ -76,15 +76,6 @@ const removeProduct = asyncHandler(async (req, res) => {
         res.status(500).json({ error: "Server error" });
     }
 });
-const removeAllProduct = asyncHandler(async (req, res) => {
-    try {
-        const product = await Product.deleteMany({});
-        res.json(product);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: "Server error" });
-    }
-});
 
 const fetchProducts = asyncHandler(async (req, res) => {
     try {
@@ -253,6 +244,5 @@ export {
     fetchTopProducts,
     fetchNewProducts,
     filterProducts,
-    searchProducts,
-    removeAllProduct
+    searchProducts
 };

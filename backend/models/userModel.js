@@ -1,4 +1,3 @@
-import { required } from "khalti-checkout-web";
 import mongoose from "mongoose";
 
 const userSchema = mongoose.Schema(
@@ -31,15 +30,6 @@ const userSchema = mongoose.Schema(
             type: String,
             required: true,
             default: '/uploads/default.png',
-        },
-        otp: {
-            type: String,
-
-        },
-        orderCount: {
-            type: Number,
-            required: true,
-            default: 0
         }
     },
     { timestamps: true }

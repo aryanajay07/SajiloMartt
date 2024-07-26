@@ -27,7 +27,7 @@ const ProductCarousel = () => {
   };
 
   return (
-    <div className="mb-4 m-auto  lg:block xl:block md:block">
+    <div className="mb-4  lg:block xl:block md:block">
       {isLoading ? null : error ? (
         <Message variant="danger">
           {error?.data?.message || error.error}
@@ -54,7 +54,7 @@ const ProductCarousel = () => {
                 <img
                   src={image}
                   alt={name}
-                  className="w-full h-100 object-cover rounded-lg object-cover h-[30rem]"
+                  className="w-full rounded-lg object-cover h-[30rem]"
                 />
 
                 <div className="mt-4 flex justify-between">

@@ -11,11 +11,11 @@ const Home = () => {
   const { data, isLoading, isError } = useGetProductsQuery({ keyword });
 
   return (
-    <div className="min-h-screen container mx-auto flex flex-col">
+    <div className="min-h-screen flex flex-col">
       <div
-        className="bg-cover bg-center  py-16 flex-grow"
+        className="bg-cover bg-center py-16 flex-grow"
         style={{
-          // backgroundImage: `url('https://upload.wikimedia.org/wikipedia/commons/5/50/Black_Wallpaper.jpg ')`
+          backgroundImage: `url(' ')`
         }}
       >
         <div className="container mx-auto text-center text-white">
@@ -23,7 +23,7 @@ const Home = () => {
             Discover Your Next Favorite!
           </h1>
           <p className="text-lg mb-8">
-            Explore Variety of  Products with SAJIOMART
+            Explore Endless Possibilities with GPT Chat
           </p>
           {!isLoading && !isError && (
             <Link
@@ -36,13 +36,14 @@ const Home = () => {
         </div>
       </div>
 
+      {!keyword && <Header />}
       <div className="flex-grow">
         {isLoading ? (
           <div className="flex justify-center items-center min-h-screen">
             <Loader />
           </div>
         ) : isError ? (
-          <div className="flex justify-center mx-auto items-center min-h-screen">
+          <div className="flex justify-center items-center min-h-screen">
             <Message variant="danger">
               {isError?.data?.message ||
                 isError?.error ||
@@ -52,10 +53,10 @@ const Home = () => {
         ) : (
           <div className="container mx-auto px-4 py-8">
             <div className="flex justify-between items-center mb-8">
-              <h1 className="text-4xl text-white font-bold">Top Products</h1>
+              <h1 className="text-4xl font-bold">Top Products</h1>
               <Link
                 to="/shop"
-                classN ame="bg-pink-600 text-white font-bold rounded-full py-2 px-10 shadow-lg transform transition-transform hover:scale-105"
+                className="bg-pink-600 text-white font-bold rounded-full py-2 px-10 shadow-lg transform transition-transform hover:scale-105"
               >
                 Shop
               </Link>
@@ -68,7 +69,6 @@ const Home = () => {
             </div>
           </div>
         )}
-        {!keyword && <Header />}
       </div>
     </div>
   );

@@ -5,13 +5,12 @@ import Message from '../../components/Message';
 import Loader from '../../components/Loader';
 import AdminMenu from './AdminMenu';
 import { AiFillDelete } from 'react-icons/ai';
-import { useSelector } from 'react-redux';
 
 const OrderList = () => {
   const [forceRefreshKey, setForceRefreshKey] = useState(0);
   const { data: orders, isLoading, error, refetch } = useGetOrdersQuery();
   const [deleteOrderById, { isLoading: isCanceling, error: cancelError }] = useDeleteOrderByIdMutation();
-  const { userInfo } = useSelector((state) => state.auth);
+
   useEffect(() => {
     refetch();
   }, [forceRefreshKey, refetch]);
@@ -25,10 +24,6 @@ const OrderList = () => {
       }
     }
   };
-
-  const filteredOrders = orders?.filter((order) =>
-    order.orderItems.some((item) => item.product && item.product.vendor === userInfo._id)
-  ) || [];
 
   return (
     <>
@@ -58,7 +53,7 @@ const OrderList = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredOrders.map((order) => (
+              {orders.map((order) => (
                 <tr key={order._id}>
                   <td>
                     <img src={order.orderItems[0].image} alt={order._id} className="w-[5rem] pt-4" />
