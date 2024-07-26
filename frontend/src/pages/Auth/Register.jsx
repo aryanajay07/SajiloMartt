@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../components/Loader";
-import { useRegisterMutation } from "../../redux/api/usersApiSlice";
+import { useRegisterMutation, useVerifyOtpMutation } from "../../redux/api/usersApiSlice";
 import { setCredentials } from "../../redux/Features/auth/authSlice";
 import { toast } from "react-toastify";
 
@@ -11,13 +11,17 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [otp, setOtp] = useState("");
+  const [otpToken, setOtpToken] = useState("");
+  const [otpSent, setOtpSent] = useState(false);
   const [role, setRole] = useState("customer");
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [register, { isLoading }] = useRegisterMutation();
+  const [register, { isLoading: isRegisterLoading }] = useRegisterMutation();
+  const [verifyOtp, { isLoading: isVerifyLoading }] = useVerifyOtpMutation();
 
   const { userInfo } = useSelector((state) => state.auth);
 
@@ -44,13 +48,33 @@ const Register = () => {
           password,
           role,
         }).unwrap();
-        dispatch(setCredentials({ ...res }));
-        navigate(redirect);
-        toast.success("User successfully registered");
+        setOtpToken(res.otpToken);
+        setOtpSent(true);
+        toast.success("OTP sent to your email address");
       } catch (err) {
         console.log(err);
         toast.error(err.data.message);
       }
+    }
+  };
+
+  const verifyOtpHandler = async (e) => {
+    e.preventDefault();
+
+    try {
+      const res = await verifyOtp({
+        otp,
+        otpToken,
+        username,
+        email,
+        password,
+        role,
+      }).unwrap();
+      dispatch(setCredentials({ ...res }));
+      navigate(redirect);
+      toast.success("User successfully registered");
+    } catch (err) {
+      toast.error(err.data.message);
     }
   };
 
@@ -94,85 +118,91 @@ const Register = () => {
           </div>
         </div>
 
-        <form onSubmit={submitHandler} className="container w-[40rem]">
-          <div className="my-[2rem]">
-            <label
-              htmlFor="name"
-              className="block text-sm font-medium text-white"
+        {!otpSent ? (
+          <form onSubmit={submitHandler} className="container w-[40rem]">
+            <div className="my-[2rem]">
+              <label htmlFor="name" className="block text-sm font-medium text-white">Name</label>
+              <input
+                type="text"
+                id="name"
+                className="mt-1 p-2 text-black border rounded w-full"
+                placeholder="Enter name"
+                value={username}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </div>
+
+            <div className="my-[2rem]">
+              <label htmlFor="email" className="block text-sm font-medium text-white">Email Address</label>
+              <input
+                type="email"
+                id="email"
+                className="mt-1 p-2 border text-black rounded w-full"
+                placeholder="Enter email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+
+            <div className="my-[2rem]">
+              <label htmlFor="password" className="block text-sm font-medium text-white">Password</label>
+              <input
+                type="password"
+                id="password"
+                className="mt-1 p-2 text-black border rounded w-full"
+                placeholder="Enter password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+
+            <div className="my-[2rem]">
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-white">Confirm Password</label>
+              <input
+                type="password"
+                id="confirmPassword"
+                className="mt-1 p-2 border text-black rounded w-full"
+                placeholder="Confirm password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+            </div>
+
+            <button
+              disabled={isRegisterLoading}
+              type="submit"
+              className="bg-pink-500 text-white px-4 py-2 rounded cursor-pointer my-[1rem]"
             >
-              Name
-            </label>
-            <input
-              type="text"
-              id="name"
-              className="mt-1 p-2 border rounded w-full"
-              placeholder="Enter name"
-              value={username}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </div>
+              {isRegisterLoading ? "Sending OTP..." : "Register"}
+            </button>
 
-          <div className="my-[2rem]">
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-white"
+            {isRegisterLoading && <Loader />}
+          </form>
+        ) : (
+          <form onSubmit={verifyOtpHandler} className="container w-[40rem]">
+            <div className="my-[2rem]">
+              <label htmlFor="otp" className="block text-sm font-medium text-white">OTP</label>
+              <input
+                type="text"
+                id="otp"
+                className="mt-1 p-2 border text-black rounded w-full"
+                placeholder="Enter OTP"
+                value={otp}
+                onChange={(e) => setOtp(e.target.value)}
+              />
+            </div>
+
+            <button
+              disabled={isVerifyLoading}
+              type="submit"
+              className="bg-pink-500 text-white px-4 py-2 rounded cursor-pointer my-[1rem]"
             >
-              Email Address
-            </label>
-            <input
-              type="email"
-              id="email"
-              className="mt-1 p-2 border rounded w-full"
-              placeholder="Enter email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
+              {isVerifyLoading ? "Verifying OTP..." : "Verify OTP"}
+            </button>
 
-          <div className="my-[2rem]">
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-white"
-            >
-              Password
-            </label>
-            <input
-              type="password"
-              id="password"
-              className="mt-1 p-2 border rounded w-full"
-              placeholder="Enter password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-
-          <div className="my-[2rem]">
-            <label
-              htmlFor="confirmPassword"
-              className="block text-sm font-medium text-white"
-            >
-              Confirm Password
-            </label>
-            <input
-              type="password"
-              id="confirmPassword"
-              className="mt-1 p-2 border rounded w-full"
-              placeholder="Confirm password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-            />
-          </div>
-
-          <button
-            disabled={isLoading}
-            type="submit"
-            className="bg-pink-500 text-white px-4 py-2 rounded cursor-pointer my-[1rem]"
-          >
-            {isLoading ? "Registering..." : "Register"}
-          </button>
-
-          {isLoading && <Loader />}
-        </form>
+            {isVerifyLoading && <Loader />}
+          </form>
+        )}
 
         <div className="mt-4">
           <p className="text-black">
@@ -186,11 +216,6 @@ const Register = () => {
           </p>
         </div>
       </div>
-      {/* <img
-        src="https://images.unsplash.com/photo-1576502200916-3808e07386a5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2065&q=80"
-        alt=""
-        className="h-[65rem] w-[59%] xl:block md:hidden sm:hidden rounded-lg"
-      /> */}
     </section>
   );
 };

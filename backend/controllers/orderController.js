@@ -80,7 +80,11 @@ const createOrder = async (req, res) => {
 
 const getAllOrders = async (req, res) => {
     try {
-        const orders = await Order.find({}).populate("user", "id username");
+        const orders = await Order.find({}).populate("user", "id username")
+            .populate({
+                path: 'orderItems.product',
+                select: 'vendor'
+            })
         res.json(orders);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -141,9 +145,15 @@ const calcualteTotalSalesByDate = async (req, res) => {
 
 const findOrderById = async (req, res) => {
     try {
-        const order = await Order.findById(req.params.id).populate(
-            "user",
-        );
+        const order = await Order.findById(req.params.id).populate("user",)
+            .populate({
+                path: 'orderItems.product',
+                populate: {
+                    path: 'vendor',
+                    model: 'User'
+                }
+            })
+
 
         if (order) {
             res.json(order);
@@ -203,6 +213,20 @@ const markOrderAsPaid = async (req, res) => {
             };
 
             const updateOrder = await order.save();
+
+            await Promise.all(order.orderItems.map(async (item) => {
+                const product = await Product.findById(item.product._id);
+                if (product) {
+                    product.salesCount = (product.salesCount || 0) + item.qty;
+                    await product.save();
+                }
+                // Increment orderCount for the user
+                const user = await User.findById(order.user._id);
+                if (user) {
+                    user.orderCount = (user.orderCount || 0) + 1;
+                    await user.save();
+                }
+            }));
             res.status(200).json(updateOrder);
         } else {
             res.status(404);

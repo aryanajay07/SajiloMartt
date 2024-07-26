@@ -28,7 +28,7 @@ const ProductTabs = ({
   };
 
   return (
-    <div className="flex flex-col md:flex-row">
+    <div className="flex flex-col text-white md:flex-row">
       <section className="mr-[5rem]">
         {(userInfo && userInfo.role === "customer") && <div
           className={`flex-1 p-4 cursor-pointer text-lg ${activeTab === 1 ? "font-bold" : ""

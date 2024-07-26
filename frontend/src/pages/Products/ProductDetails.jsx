@@ -19,7 +19,7 @@ import moment from "moment";
 import HeartIcon from "./HeartIcon";
 import Ratings from "./Ratings";
 import ProductTabs from "./ProductTabs";
-import { addToCart } from "../../redux/Features/Cart/cartSlice";
+import { addToCart } from "../../redux/Features/cart/cartSlice";
 
 const ProductDetails = () => {
   const { id: productId } = useParams();
@@ -90,13 +90,13 @@ const ProductDetails = () => {
               <img
                 src={product.image}
                 alt={product.name}
-                className="w-full xl:w-[50rem] lg:w-[45rem] md:w-[30rem] sm:w-[20rem] mr-[2rem]"
+                className="w-full xl:w-[50rem]  lg:w-[45rem] md:w-[30rem] sm:w-[20rem] mr-[2rem]"
               />
 
               <HeartIcon product={product} />
             </div>
 
-            <div className="flex flex-col justify-between">
+            <div className="flex flex-col text-white justify-between">
               <h2 className="text-2xl font-semibold">{product.name}</h2>
               <p className="my-4 xl:w-[35rem] lg:w-[35rem] md:w-[30rem] text-[#B0B0B0]">
                 {product.description}
