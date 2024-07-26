@@ -101,19 +101,6 @@ const Shipping = () => {
                 />
 
                 <span className="ml-2">Khalti </span>
-               
-              </label>
-              <label className="inline-flex items-center ml-8 ">
-                <input
-                  type="radio"
-                  className="form-radio text-pink-500"
-                  name="paymentMethod"
-                  value="Khalti"
-                  checked={paymentMethod === "Khalti"}
-                  onChange={(e) => setPaymentMethod(e.target.value)}
-                />
-
-                <span className="ml-2">Cash on delivery </span>
               </label>
             </div>
             <div className="mt-2">
