@@ -25,7 +25,7 @@ const Cart = () => {
 
   return (
     <>
-      <div className="ml-[10rem]">
+      <div className="ml-[10rem] ">
         {userInfo ?
           (<div className="container flex justify-around items-start  wrap mx-auto mt-8">
             {cartItems.length === 0 ? (
@@ -54,7 +54,7 @@ const Cart = () => {
 
                         <div className="mt-2 text-white">{item.brand}</div>
                         <div className="mt-2 text-white font-bold">
-                          $ {item.price}
+                          Rs {item.price}
                         </div>
                       </div>
 
@@ -92,7 +92,7 @@ const Cart = () => {
                       </h2>
 
                       <div className="text-2xl font-bold">
-                        ${" "}
+                        Rs{" "}
                         {cartItems
                           .reduce((acc, item) => acc + item.qty * item.price, 0)
                           .toFixed(2)}

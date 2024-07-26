@@ -9,7 +9,7 @@ const Product = ({ product }) => {
           <img
             src={product.image}
             alt={product.name}
-            className="w-96 h-auto rounded overflow-hidden"
+            className="w-96  h-64 object-cover  rounded overflow-hidden"
           />
           <HeartIcon product={product} />
         </div>

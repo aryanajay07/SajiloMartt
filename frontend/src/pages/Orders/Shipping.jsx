@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import {
   saveShippingAddress,
   savePaymentMethod,
-} from "../../redux/Features/cart/cartSlice";
+} from "../../redux/Features/Cart/cartSlice";
 import ProgressSteps from "../../components/ProgressSteps";
 
 const Shipping = () => {
@@ -101,7 +101,9 @@ const Shipping = () => {
                 />
 
                 <span className="ml-2">Khalti </span>
+
               </label>
+
             </div>
             <div className="mt-2">
               <label className="inline-flex items-center">

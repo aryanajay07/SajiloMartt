@@ -54,7 +54,7 @@ const updateProductDetails = asyncHandler(async (req, res) => {
 
         const product = await Product.findByIdAndUpdate(
             req.params.id,
-            { ...req.fields },
+            { ...req.fields, countInStock: quantity },
             { new: true }
         );
 

@@ -79,6 +79,8 @@ const verifyOtp = asyncHandler(async (req, res) => {
 
     try {
         const decoded = jwt.verify(otpToken, process.env.JWT_SECRET);
+        console.log("decoded otp", decoded.otp)
+        console.log("actual otp", otp)
 
         if (decoded.otp === otp) {
             const salt = await bcrypt.genSalt(10);
@@ -97,10 +99,10 @@ const verifyOtp = asyncHandler(async (req, res) => {
                     role: newUser.role,
                 });
             } catch (error) {
-                res.status(400).json({ message: "Invalid OTP." });
+                res.status(400).json({ message: error.message });
             }
         } else {
-            res.status(400).send("Invalid OTP.");
+            res.status(400).send("Invalid OTP please try again.");
         }
     } catch (error) {
         res.status(400).json({ message: "Invalid or expired OTP token." });

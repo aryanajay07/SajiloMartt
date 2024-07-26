@@ -51,6 +51,7 @@ const Register = () => {
           role,
         }).unwrap();
         setOtpToken(res.otpToken);
+        console.log("otp:", otp)
         setOtpSent(true);
         toast.success("OTP sent to your email address");
       } catch (err) {
@@ -152,7 +153,7 @@ const Register = () => {
               <input
                 type="password"
                 id="password"
-                className="mt-1 p-2 text-black border rounded w-full"
+                className="mt-1 p-2 text-red-500 border rounded w-full"
                 placeholder="Enter password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -208,7 +209,7 @@ const Register = () => {
         )}
 
         <div className="mt-4">
-          <p className="text-black">
+          <p className=" ">
             Already have an account?{" "}
             <Link
               to={redirect ? `/login?redirect=${redirect}` : "/login"}
