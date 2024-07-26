@@ -1,10 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import Message from "../../components/Message";
 import Loader from "../../components/Loader";
 import { clearCartItems } from "../../redux/Features/cart/cartSlice"; // Ensure correct import path
+import { useUpdateProductMutation } from "../../redux/api/productApiSlice";
 
 import KhaltiCheckout from "khalti-checkout-web"; // Import Khalti Checkout
 import { KHALTI_PUBLIC_KEY } from "../../redux/constants";
@@ -17,16 +18,15 @@ import {
 const Order = () => {
   const { id: orderId } = useParams();
   const { data: order, refetch, isLoading, error } = useGetOrderDetailsQuery(orderId);
+
+  const [updateProduct] = useUpdateProductMutation();
+
   const [payOrder, { isLoading: loadingPay }] = usePayOrderMutation();
   const [deliverOrder, { isLoading: loadingDeliver }] = useDeliverOrderMutation();
   const { userInfo } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-<<<<<<< HEAD
   const [delievered, setDelievered] = useState(false)
   const [isPaid, setIsPaid] = useState(false)
-=======
-
->>>>>>> parent of e7708ff (Merge branch 'main' of https://github.com/aryanajay07/SajiloMartt)
   useEffect(() => {
     if (order && !order.isPaid) {
       const khaltiConfig = {
@@ -71,6 +71,7 @@ const Order = () => {
     try {
       await payOrder({ orderId, details: payload });
       refetch();
+      // setSalesCount(salesCount + 1)
       toast.success("Order is paid");
     } catch (error) {
       toast.error(error?.data?.message || error.message);
@@ -79,6 +80,7 @@ const Order = () => {
 
   const deliverHandler = async () => {
     await deliverOrder(orderId);
+    setDelievered(true)
     refetch();
   };
 
@@ -97,11 +99,7 @@ const Order = () => {
   ) : error ? (
     <Message variant="danger">Cannot find order</Message>
   ) : (
-<<<<<<< HEAD
-    <div className="container mx-auto flex flex-col ml-[10rem] md:flex-row">
-=======
     <div className="container flex flex-col  md:flex-row">
->>>>>>> parent of e7708ff (Merge branch 'main' of https://github.com/aryanajay07/SajiloMartt)
       <div className="md:w-2/3 pr-4">
         <div className="border gray-300 mt-5 pb-4 mb-5">
           {order.orderItems.length === 0 ? (
@@ -143,10 +141,11 @@ const Order = () => {
             </div>
           )}
         </div>
-      </div>
+      </div>a
 
-      <div className="md:w-1/3">
-        <div className="mt-5 border-gray-300 pb-4 mb-4">
+      <div className="md:w-1/3 mx-auto flex flex-col mx-auto">
+        <div className="mt-5 border-gray-300 pb-4 mb-4  mx-auto">
+
           <h2 className="text-xl font-bold mb-2">Shipping</h2>
           <p className="mb-4 mt-4">
             <strong className="text-pink-500">Order:</strong> {order._id}
@@ -162,12 +161,12 @@ const Order = () => {
           </p>
           {order.isPaid ? (
             <Message variant="success">Paid on {order.paidAt}</Message>
+
           ) : (
             <Message variant="danger">Not paid</Message>
           )}
         </div>
         <h2 className="text-xl font-bold mb-2 mt-[3rem]">Order Summary</h2>
-<<<<<<< HEAD
         <div className="  mr-20 ">
           <div className="flex justify-between mb-2">
             <span>Items</span>
@@ -234,48 +233,7 @@ const Order = () => {
           {userInfo && order.isPaid && order.isDelivered && (
             <Message variant="success">Delievered on {order.deliveredAt}</Message>
           )}
-=======
-        <div className="flex justify-between mb-2">
-          <span>Items</span>
-          <span>Rs {order.itemsPrice}</span>
->>>>>>> parent of e7708ff (Merge branch 'main' of https://github.com/aryanajay07/SajiloMartt)
         </div>
-        <div className="flex justify-between mb-2">
-          <span>Shipping</span>
-          <span>Rs {order.shippingPrice}</span>
-        </div>
-        <div className="flex justify-between mb-2">
-          <span>Tax</span>
-          <span>Rs {order.taxPrice}</span>
-        </div>
-        <div className="flex justify-between mb-2">
-          <span>Total</span>
-          <span>Rs{order.totalPrice}</span>
-        </div>
-        {!order.isPaid && (
-          <div>
-            {loadingPay && <Loader />}
-            <button
-              type="button"
-              className="bg-pink-500 text-white w-full py-2"
-              onClick={() => window.khaltiCheckout.show({ amount: order.totalPrice * 100 })} // Khalti requires amount in paisa
-            >
-              Pay with Khalti
-            </button>
-          </div>
-        )}
-        {loadingDeliver && <Loader />}
-        {userInfo && userInfo.role === 'vendor' && order.isPaid && !order.isDelivered && (
-          <div>
-            <button
-              type="button"
-              className="bg-pink-500 text-white w-full py-2"
-              onClick={deliverHandler}
-            >
-              Mark As Delivered
-            </button>
-          </div>
-        )}
       </div>
     </div>
   );

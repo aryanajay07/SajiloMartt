@@ -3,6 +3,8 @@ import asyncHandler from "../middlewares/asyncHandler.js";
 import bcrypt from "bcryptjs";
 import createToken from "../utils/createToken.js";
 import jwt from 'jsonwebtoken';
+import nodemailer from 'nodemailer';
+
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
