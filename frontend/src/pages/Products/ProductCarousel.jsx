@@ -25,19 +25,25 @@ const ProductCarousel = () => {
     autoplay: true,
     autoplaySpeed: 3000,
   };
+  const productsArray = Array.isArray(products) ? [...products] : [];
+
+  const sortedProducts = productsArray.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 2);;
 
   return (
     <div className="mb-4 ml-[2rem] lg:block xl:block md:block">
+      <h1 className="text-4xl text-white font-bold mb-6">New Comings</h1>
       {isLoading ? null : error ? (
         <Message variant="danger">
           {error?.data?.message || error.error}
         </Message>
       ) : (
+
         <Slider
           {...settings}
           className="xl:w-[48rem]  lg:w-[48rem] md:w-[54rem] sm:w-[38rem] sm:block"
         >
-          {products.map(
+
+          {sortedProducts.map(
             ({
               image,
               _id,

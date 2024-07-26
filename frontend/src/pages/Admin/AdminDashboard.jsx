@@ -26,6 +26,8 @@ const AdminDashboard = () => {
     options: {
       chart: {
         type: "line",
+        height: 100,
+        width: 100,
       },
       tooltip: {
         theme: "dark",
@@ -45,7 +47,7 @@ const AdminDashboard = () => {
         borderColor: "#ccc",
       },
       markers: {
-        size: 1,
+        size: 2,
       },
       xaxis: {
         categories: [],
@@ -92,14 +94,24 @@ const AdminDashboard = () => {
     }
   }, [salesDetail]);
 
-  const filteredProducts = products
+  const productsArray = Array.isArray(products) ? [...products] : [];
+
+  let sortedProducts = productsArray?.sort((a, b) => (b.salesCount || 0) - (a.salesCount || 0)) || [];
+
+  let displayProducts = sortedProducts
+
+  const filteredProducts = sortedProducts
     ?.filter((product) => product.vendor === userInfo._id && (product.salesCount || 0) > 0)
-    .sort((a, b) => (b.salesCount || 0) - (a.salesCount || 0)) || [];
+    || [];
+
+  if (userInfo.role === "vendor")
+    displayProducts = filteredProducts
 
   const filteredUsers = (users || [])
     .filter(user => (user.orderCount || 0) > 0) // Filter out users with zero orders
     .slice() // Create a shallow copy of the array
     .sort((a, b) => (b.orderCount || 0) - (a.orderCount || 0)); // Sort by orderCount
+
   return (
     <>
       <AdminMenu />
@@ -133,17 +145,17 @@ const AdminDashboard = () => {
             </h1>
           </div>
         </div>
-        <div>
+        <div className="ml-10 mt-10">
           <h1>Top Sales</h1>
           {productsLoading ? (
             <Loader />
           ) : (
-            filteredProducts.map((product) => (
+            displayProducts.map((product) => (
               <div className="flex mt-6" key={product._id}>
                 <img
                   src={product.image}
                   alt={product.name}
-                  className="w-[10rem] object-cover"
+                  className="w-64 h-64 object-cover "
                 />
                 <div className="p-4 flex flex-col justify-around">
                   <div className="flex justify-between">
@@ -164,7 +176,7 @@ const AdminDashboard = () => {
                     {userInfo.role === "vendor" ? (
                       <Link
                         to={`/admin/product/update/${product._id}`}
-                        className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-pink-700 rounded-lg hover:bg-pink-800 focus:ring-4 focus:outline-none focus:ring-pink-300 dark:bg-pink-600 dark:hover:bg-pink-700 dark:focus:ring-pink-800"
+                        className="inline-flex items-center px-3 py-4 text-sm font-medium text-center text-white bg-pink-700 rounded-lg hover:bg-pink-800 focus:ring-4 focus:outline-none focus:ring-pink-300 dark:bg-pink-600 dark:hover:bg-pink-700 dark:focus:ring-pink-800"
                       >
                         Update Product
                         <svg
@@ -186,7 +198,7 @@ const AdminDashboard = () => {
                     ) : (
                       <Link
                         to={`/product/${product._id}`}
-                        className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-pink-700 rounded-lg hover:bg-pink-800 focus:ring-4 focus:outline-none focus:ring-pink-300 dark:bg-pink-600 dark:hover:bg-pink-700 dark:focus:ring-pink-800"
+                        className="inline-flex items-center px-3 py-4 text-sm font-medium text-center text-white bg-pink-700 rounded-lg hover:bg-pink-800 focus:ring-4 focus:outline-none focus:ring-pink-300 dark:bg-pink-600 dark:hover:bg-pink-700 dark:focus:ring-pink-800"
                       >
                         View Product
                         <svg
@@ -213,18 +225,18 @@ const AdminDashboard = () => {
             ))
           )}
         </div>
-        <div>
-          <h1>Top Users</h1>
+        <div className="mt-10">
+          <h1 >Top Users</h1>
           <table className="w-full md:w-4/5 mx-auto">
             <thead>
               <tr>
-                <th className="px-4 py-2 text-left">IMAGE</th>
-                <th className="px-4 py-2 text-left">ID</th>
-                <th className="px-4 py-2 text-left">NAME</th>
-                <th className="px-4 py-2 text-left">EMAIL</th>
-                <th className="px-4 py-2 text-left">Order Count</th>
+                <th className="px-4 py-4 text-left">IMAGE</th>
+                <th className="px-4 py-4 text-left">ID</th>
+                <th className="px-4 py-4 text-left">NAME</th>
+                <th className="px-4 py-4 text-left">EMAIL</th>
+                <th className="px-4 py-4 text-left">Order Count</th>
 
-                <th className="px-4 py-2"></th>
+                <th className="px-4 py-4"></th>
               </tr>
             </thead>
             <tbody>
@@ -236,20 +248,20 @@ const AdminDashboard = () => {
                       className="w-full h-full object-cover"
                     />
                   </div>
-                  <td className="px-4 py-2">{user._id}</td>
-                  <td className="px-4 py-2">
+                  <td className="px-4 py-4">{user._id}</td>
+                  <td className="px-4 py-4">
                     <div className="flex items-center">
                       {user.username}{" "}
                     </div>
                   </td>
-                  <td className="px-4 py-2">
+                  <td className="px-4 py-4">
 
                     <div className="flex items-center">
                       <a href={`mailto:${user.email}`}>{user.email}</a>{" "}
                     </div>
 
                   </td>
-                  <td className="px-4 py-2">
+                  <td className="px-4 py-4">
                     <div className="flex items-center">
                       {user.orderCount}{" "}
                     </div>
@@ -264,7 +276,7 @@ const AdminDashboard = () => {
             options={state.options}
             series={state.series}
             type="bar"
-            width="70%"
+            width="80%"
           />
         </div>
         {/* <div className="mt-[4rem]">

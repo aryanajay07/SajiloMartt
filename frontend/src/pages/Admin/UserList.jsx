@@ -60,12 +60,12 @@ const UserList = () => {
           <table className="w-full md:w-4/5 mx-auto">
             <thead>
               <tr>
-                <th className="px-4 py-2 text-left">IMAGE</th>
-                <th className="px-4 py-2 text-left">ID</th>
-                <th className="px-4 py-2 text-left">NAME</th>
-                <th className="px-4 py-2 text-left">EMAIL</th>
-                <th className="px-4 py-2 text-left">ROLE</th>
-                <th className="px-4 py-2"></th>
+                <th className="px-4 py-4 text-left">IMAGE</th>
+                <th className="px-4 py-4 text-left">ID</th>
+                <th className="px-4 py-4 text-left">NAME</th>
+                <th className="px-4 py-4 text-left">EMAIL</th>
+                <th className="px-4 py-4 text-left">ROLE</th>
+                <th className="px-4 py-4"></th>
               </tr>
             </thead>
             <tbody>
@@ -77,28 +77,28 @@ const UserList = () => {
                       className="w-full h-full object-cover"
                     />
                   </div>
-                  <td className="px-4 py-2">{user._id}</td>
-                  <td className="px-4 py-2">
+                  <td className="px-4 py-4">{user._id}</td>
+                  <td className="px-4 py-4">
                     <div className="flex items-center">
                       {user.username}{" "}
                     </div>
                   </td>
-                  <td className="px-4 py-2">
+                  <td className="px-4 py-4">
 
                     <div className="flex items-center">
                       <a href={`mailto:${user.email}`}>{user.email}</a>{" "}
                     </div>
 
                   </td>
-                  <td className="px-4 py-2">
+                  <td className="px-4 py-4">
                     {user.role}
                   </td>
-                  <td className="px-4 py-2">
+                  <td className="px-4 py-4">
                     {!(user.role == "admin") && (
                       <div className="flex">
                         <button
                           onClick={() => deleteHandler(user._id)}
-                          className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                          className="bg-red-600 hover:bg-red-700 text-white font-bold py-4 px-4 rounded"
                         >
                           <FaTrash />
                         </button>

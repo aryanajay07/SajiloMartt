@@ -21,8 +21,11 @@ const SmallProduct = ({ product }) => {
             <span className="bg-pink-100 text-pink-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-pink-900 dark:text-pink-300">
               Rs. {product.price}
             </span>
-          </h2>
 
+          </h2>
+          <span className="bg-pink-100 text-pink-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-pink-900 dark:text-pink-300">
+            Rating: {product.rating}
+          </span>
         </div>
       </Link>
     </div >
