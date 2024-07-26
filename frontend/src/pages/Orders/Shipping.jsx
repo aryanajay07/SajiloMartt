@@ -101,7 +101,6 @@ const Shipping = () => {
                 />
 
                 <span className="ml-2">Khalti </span>
-
               </label>
 
             </div>

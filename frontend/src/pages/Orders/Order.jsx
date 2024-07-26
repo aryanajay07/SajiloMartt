@@ -105,8 +105,8 @@ const Order = () => {
           {order.orderItems.length === 0 ? (
             <Message>Order is empty</Message>
           ) : (
-            <div className="overflow-x-auto pl-10 ">
-              <table className="w-[80%] ">
+            <div className="overflow-x-auto">
+              <table className="w-[80%]">
                 <thead className="border-b-2">
                   <tr>
                     <th className="p-2">Image</th>

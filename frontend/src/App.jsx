@@ -11,6 +11,8 @@ function App() {
       <Navigation />
       <main className="py-3 flex flex-col min-h-screen">
         <Outlet />
+
+
       </main>
       <Footer />
     </>
