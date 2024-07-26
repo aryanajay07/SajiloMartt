@@ -97,7 +97,7 @@ const Shop = () => {
       <div className="container mx-auto">
         <div className="flex md:flex-row">
           <div className="bg-[#151515] p-3 mt-2 mb-2">
-            <h2 className="h4 text-center py-2 text-white bg-black rounded-full mb-2">
+            <h2 className="h4 text-center py-2 bg-black rounded-full mb-2">
               Filter by Categories
             </h2>
 
@@ -173,7 +173,7 @@ const Shop = () => {
               ))}
             </div>
 
-            <h2 className="h4 text-center py-2 text-white bg-black rounded-full mb-2">
+            <h2 className="h4 text-center py-2 bg-black rounded-full mb-2">
               Filter by Price Limit
             </h2>
 
@@ -189,7 +189,7 @@ const Shop = () => {
 
             <div className="p-5 pt-0">
               <button
-                className="w-full text-white border my-4"
+                className="w-full border my-4"
                 onClick={() => window.location.reload()}
               >
                 Reset
@@ -198,7 +198,7 @@ const Shop = () => {
           </div>
 
           <div className="p-3">
-            <h2 className="h4 text-center text-white mb-2">
+            <h2 className="h4 text-center mb-2">
               Products ({products?.length})
             </h2>
             {hasProductsUnderPrice ? (

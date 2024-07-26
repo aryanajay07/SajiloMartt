@@ -14,7 +14,7 @@ import {
     markOrderAsDelivered,
 } from "../controllers/orderController.js";
 
-import { authenticate, authorizeVendor, authorizeVendorOrAdmin } from "../middlewares/authMiddleware.js";
+import { authenticate, authorizeVendor } from "../middlewares/authMiddleware.js";
 
 router
     .route("/")
@@ -26,7 +26,7 @@ router.route("/total-orders").get(countTotalOrders);
 router.route("/total-sales").get(calculateTotalSales);
 router.route("/total-sales-by-date").get(calcualteTotalSalesByDate);
 router.route("/:id").get(authenticate, findOrderById);
-router.route("/:id").delete(authenticate, authorizeVendorOrAdmin, deleteOrderById);
+router.route("/:id").delete(authenticate, deleteOrderById);
 router.route("/").delete(authenticate, deleteOrders);
 
 router.route("/:id/pay").put(authenticate, markOrderAsPaid);

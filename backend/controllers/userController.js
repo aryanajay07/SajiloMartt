@@ -1,65 +1,21 @@
 import User from "../models/userModel.js";
-import nodemailer from 'nodemailer';
-import speakeasy from 'speakeasy';
 import asyncHandler from "../middlewares/asyncHandler.js";
 import bcrypt from "bcryptjs";
 import createToken from "../utils/createToken.js";
-import jwt from 'jsonwebtoken';
-
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: 'realajaryan@gmail.com',
-        pass: 'aryanajay',
-    },
-});
-
-const sendOtpEmail = (email, otp) => {
-    const mailOptions = {
-        from: 'realajaryan@gmail.com',
-        to: email,
-        subject: 'SajiloMart OTP Code',
-        text: `Your OTP code is ${otp}`,
-    };
-    console.log("after mailoptions")
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            console.log(error);
-        } else {
-            console.log('Email sent: ' + info.response);
-        }
-        console.log("inside transportaer")
-
-    });
-};
 
 const createUser = asyncHandler(async (req, res) => {
     const { username, email, password, role } = req.body;
 
     if (!username || !email || !password) {
-        res.status(400).json({ message: "Please fill all the inputs." });
+        throw new Error("Please fill all the inputs.");
         return;
     }
 
     const userExists = await User.findOne({ email });
     if (userExists) {
-        res.status(400).json({ message: "User already exists" });
+        res.status(400).send("User already exists");
         return;
     }
-
-    // Generate OTP
-    const otp = speakeasy.totp({
-        secret: process.env.OTP_SECRET,
-        encoding: 'base32',
-    });
-    console.log(otp);
-
-    const otpToken = jwt.sign({ email, otp }, process.env.JWT_SECRET, { expiresIn: '10m' });
-
-    sendOtpEmail(email, otp);
-    console.log("otpToken: " + otpToken);
-    // Send OTP response immediately
-    res.status(200).json({ message: "OTP sent to your email address.", otpToken });
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -69,41 +25,16 @@ const createUser = asyncHandler(async (req, res) => {
     try {
         await newUser.save();
         createToken(res, newUser._id);
+
+        res.status(201).json({
+            _id: newUser._id,
+            username: newUser.username,
+            email: newUser.email,
+            role: newUser.role,
+        });
     } catch (error) {
-        console.error(error);
-    }
-});
-
-const verifyOtp = asyncHandler(async (req, res) => {
-    const { otp, otpToken, username, email, password, role } = req.body;
-
-    try {
-        const decoded = jwt.verify(otpToken, process.env.JWT_SECRET);
-
-        if (decoded.otp === otp) {
-            const salt = await bcrypt.genSalt(10);
-            const hashedPassword = await bcrypt.hash(password, salt);
-
-            const newUser = new User({ username, email, password: hashedPassword, role });
-
-            try {
-                await newUser.save();
-                createToken(res, newUser._id);
-
-                res.status(201).json({
-                    _id: newUser._id,
-                    username: newUser.username,
-                    email: newUser.email,
-                    role: newUser.role,
-                });
-            } catch (error) {
-                res.status(400).json({ message: "Invalid OTP." });
-            }
-        } else {
-            res.status(400).send("Invalid OTP.");
-        }
-    } catch (error) {
-        res.status(400).json({ message: "Invalid or expired OTP token." });
+        res.status(400);
+        throw new Error(error.message);
     }
 });
 
@@ -288,5 +219,4 @@ export {
     updateUserById,
     getVendors,
     deleteVendorById,
-    verifyOtp
 };
