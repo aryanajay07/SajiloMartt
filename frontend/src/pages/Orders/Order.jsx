@@ -26,7 +26,7 @@ const Order = () => {
   const { userInfo } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const [delievered, setDelievered] = useState(false)
-
+  const [isPaid, setIsPaid] = useState(false)
   useEffect(() => {
     if (order && !order.isPaid) {
       const khaltiConfig = {
@@ -83,6 +83,16 @@ const Order = () => {
     setDelievered(true)
     refetch();
   };
+
+  const cashOnDeliverHandler = async () => {
+    setIsPaid(true);
+    await deliverOrder(orderId);
+    setDelievered(true)
+    refetch();
+  };
+  const cashOnDelievery = async () => {
+
+  }
 
   return isLoading ? (
     <Loader />
@@ -174,7 +184,7 @@ const Order = () => {
             <span>Total</span>
             <span>Rs{order.totalPrice}</span>
           </div>
-          {!order.isPaid && (
+          {userInfo.role === "customer " && !order.isPaid && order.paymentMethod === "Khalti" ? (
             <div>
               {loadingPay && <Loader />}
               <button
@@ -185,9 +195,22 @@ const Order = () => {
                 Pay with Khalti
               </button>
             </div>
-          )}
+          ) :
+            <div>
+              {loadingPay && <Loader />}
+              <button
+                type="button"
+                className="bg-pink-500 text-white w-full py-2"
+                onClick={cashOnDelievery}
+              >
+                Cash On deleivery
+              </button>
+            </div>
+          }
+
           {loadingDeliver && <Loader />}
-          {userInfo && userInfo.role === 'vendor' && order.isPaid && !order.isDelivered && (
+
+          {userInfo && userInfo.role === 'vendor' && order.isPaid && !order.isDelivered && (order.paymentMethod === "Khalti" ? (
             <div>
               <button
                 type="button"
@@ -197,7 +220,16 @@ const Order = () => {
                 Mark As Delivered
               </button>
             </div>
-          )}
+          ) :
+            <div>
+              <button
+                type="button"
+                className="bg-pink-500 text-white w-full py-2"
+                onClick={cashOnDeliverHandler}
+              >
+                Recieved Cash and Delivered
+              </button>
+            </div>)}
           {userInfo && order.isPaid && order.isDelivered && (
             <Message variant="success">Delievered on {order.deliveredAt}</Message>
           )}

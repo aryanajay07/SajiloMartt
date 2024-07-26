@@ -121,7 +121,7 @@ const AdminDashboard = () => {
             </div>
             <p className="mt-5">Customers</p>
             <h1 className="text-xl font-bold">
-              {usersLoading ? <Loader /> : users?.length}
+              {usersLoading ? <Loader /> : filteredUsers?.length}
             </h1>
           </div>
           <div className="rounded-lg bg-black p-5 w-[20rem] mt-5">

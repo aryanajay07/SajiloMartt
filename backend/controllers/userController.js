@@ -21,61 +21,17 @@ const sendOtpEmail = (email, otp) => {
         subject: 'SajiloMart OTP Code',
         text: `Your OTP code is ${otp}`,
     };
-
+    console.log("after mailoptions")
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
             console.log(error);
         } else {
             console.log('Email sent: ' + info.response);
         }
+        console.log("inside transportaer")
+
     });
 };
-// const createUser = asyncHandler(async (req, res) => {
-//     const { username, email, password, role } = req.body;
-
-//     if (!username || !email || !password) {
-//         res.status(400).json({ message: "Please fill all the inputs." });
-//         return;
-//     }
-
-//     const userExists = await User.findOne({ email });
-//     if (userExists) {
-//         res.status(400).json({ message: "User already exists" });
-//         return;
-//     }
-
-//     // Generate OTP
-//     const otp = speakeasy.totp({
-//         secret: process.env.OTP_SECRET,
-//         encoding: 'base32',
-//     });
-//     const otpToken = jwt.sign({ email, otp }, process.env.JWT_SECRET, { expiresIn: '10m' });
-
-//     sendOtpEmail(email, otp);
-
-
-//     res.status(200).send("OTP sent to your email address.");
-
-//     const salt = await bcrypt.genSalt(10);
-//     const hashedPassword = await bcrypt.hash(password, salt);
-
-//     const newUser = new User({ username, email, password: hashedPassword, role });
-
-//     try {
-//         await newUser.save();
-//         createToken(res, newUser._id);
-
-//         res.status(201).json({
-//             _id: newUser._id,
-//             username: newUser.username,
-//             email: newUser.email,
-//             role: newUser.role,
-//         });
-//     } catch (error) {
-//         res.status(400);
-//         res.status(400).json({ message: error.message });
-//     }
-// });
 
 const createUser = asyncHandler(async (req, res) => {
     const { username, email, password, role } = req.body;
@@ -96,10 +52,12 @@ const createUser = asyncHandler(async (req, res) => {
         secret: process.env.OTP_SECRET,
         encoding: 'base32',
     });
+    console.log(otp);
+
     const otpToken = jwt.sign({ email, otp }, process.env.JWT_SECRET, { expiresIn: '10m' });
 
     sendOtpEmail(email, otp);
-
+    console.log("otpToken: " + otpToken);
     // Send OTP response immediately
     res.status(200).json({ message: "OTP sent to your email address.", otpToken });
 

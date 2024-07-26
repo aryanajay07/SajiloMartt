@@ -44,7 +44,7 @@ const AdminMenu = () => {
                 Sales Report
               </NavLink>
             </li>
-            <li>
+            {userInfo.role === "admin" && (<li>
               <NavLink
                 className="list-item py-2 px-3 mb-5 hover:bg-[#2E2D2D] rounded-sm"
                 to="/admin/categorylist"
@@ -54,7 +54,7 @@ const AdminMenu = () => {
               >
                 Create Category
               </NavLink>
-            </li>
+            </li>)}
             {userInfo.role === "vendor" && (<li>
               <NavLink
                 className="list-item py-2 px-3  mb-5 hover:bg-[#2E2D2D] rounded-sm"

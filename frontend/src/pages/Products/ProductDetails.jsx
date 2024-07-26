@@ -19,7 +19,7 @@ import moment from "moment";
 import HeartIcon from "./HeartIcon";
 import Ratings from "./Ratings";
 import ProductTabs from "./ProductTabs";
-import { addToCart } from "../../redux/Features/cart/cartSlice";
+import { addToCart } from "../../redux/Features/Cart/cartSlice";
 
 const ProductDetails = () => {
   const { id: productId } = useParams();
@@ -98,9 +98,7 @@ const ProductDetails = () => {
 
             <div className="flex flex-col text-white justify-between">
               <h2 className="text-2xl font-semibold">{product.name}</h2>
-              <p className="my-4 xl:w-[35rem] lg:w-[35rem] md:w-[30rem] text-[#B0B0B0]">
-                {product.description}
-              </p>
+
               <p className="my-4 xl:w-[35rem] lg:w-[35rem] md:w-[30rem] text-[#B0B0B0]">
                 Venor:{product.vendor.username}
               </p>
@@ -140,23 +138,12 @@ const ProductDetails = () => {
                   text={`${product.numReviews} reviews`}
                 />
 
-                {product.countInStock > 0 && (
-                  <div>
-                    <select
-                      value={qty}
-                      onChange={(e) => setQty(e.target.value)}
-                      className="p-2 w-[6rem] rounded-lg text-black"
-                    >
-                      {[...Array(product.countInStock).keys()].map((x) => (
-                        <option key={x + 1} value={x + 1}>
-                          {x + 1}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                )}
-              </div>
 
+
+              </div>
+              <div className=""> <p className="my-4 xl:w-[35rem] lg:w-[35rem] md:w-[30rem] text-[#B0B0B0]">
+                {product.description}
+              </p></div>
               {userInfo && userInfo.role === "customer" && <div className="btn-container">
                 <button
                   onClick={() => buyProduct(product, 1)}
