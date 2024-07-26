@@ -77,6 +77,7 @@ const Order = () => {
     try {
       await payOrder({ orderId, details: payload });
       refetch();
+      // setSalesCount(salesCount + 1)
       toast.success("Order is paid");
     } catch (error) {
       toast.error(error?.data?.message || error.message);
@@ -89,24 +90,12 @@ const Order = () => {
     refetch();
   };
 
-  const cashOnDeliverHandler = async () => {
-    setIsPaid(true);
-    await payOrder({ orderId, isPaid: true });
-    refetch();
-    await deliverOrder(orderId);
-    setDelievered(true)
-    refetch();
-  };
-  const cashOnDelievery = async () => {
-
-  }
-
   return isLoading ? (
     <Loader />
   ) : error ? (
     <Message variant="danger">Cannot find order</Message>
   ) : (
-    <div className="container mx-auto flex flex-col ml-[5rem] md:flex-row">
+    <div className="container flex flex-col  md:flex-row">
       <div className="md:w-2/3 pr-4">
         <div className="border gray-300 mt-5 pb-4 mb-5">
           {order.orderItems.length === 0 ? (
@@ -149,11 +138,10 @@ const Order = () => {
           )}
         </div>
       </div>
-
-      <div className="md:w-1/3  mx-auto flex flex-col mx-auto">
+      a
+      <div className="md:w-1/3 mx-auto flex flex-col mx-auto">
         <div className="mt-5 border-gray-300 pb-4 mb-4  mx-auto">
-
-          <h2 className="text-xl font-bold pb-4 mb-2">Shipping</h2>
+          <h2 className="text-xl font-bold mb-2">Shipping</h2>
           <p className="mb-4 mt-4">
             <strong className="text-pink-500">Order:</strong> {order._id}
           </p>
@@ -176,8 +164,8 @@ const Order = () => {
             <Message variant="danger">Not paid</Message>
           )}
         </div>
-        <h2 className="text-xl font-bold mb-2 ml-20 pb-4 mt-[3rem]">Order Summary</h2>
-        <div className="  ml-20 ">
+        <h2 className="text-xl font-bold mb-2 mt-[3rem]">Order Summary</h2>
+        <div className="  mr-20 ">
           <div className="flex justify-between mb-2">
             <span>Items</span>
             <span>Rs {order.itemsPrice}</span>
@@ -194,7 +182,7 @@ const Order = () => {
             <span>Total</span>
             <span>Rs{order.totalPrice}</span>
           </div>
-          {userInfo.role === "customer" && !order.isPaid && order.paymentMethod === "Khalti" ? (
+          {!order.isPaid && (
             <div>
               {loadingPay && <Loader />}
               <button
@@ -207,41 +195,22 @@ const Order = () => {
                 Pay with Khalti
               </button>
             </div>
-          ) :
-            <div>
-              {loadingPay && <Loader />}
-              {userInfo.role === "customer" && order.paymentMethod === "Cash On Delivery" && <button
-                type="button"
-                className="bg-pink-500 text-white w-full py-2"
-                onClick={cashOnDelievery}
-              >
-                Cash On deleivery
-              </button>}
-            </div>
-          }
-
+          )}
           {loadingDeliver && <Loader />}
-
-          {userInfo && userInfo.role === 'vendor' && order.isPaid && !order.isDelivered && order.paymentMethod === "Khalti" &&
-            <div>
-              <button
-                type="button"
-                className="bg-pink-500 text-white w-full py-2"
-                onClick={deliverHandler}
-              >
-                Mark As Delivered
-              </button>
-            </div>}
-          {userInfo && userInfo.role === 'vendor' && !order.isPaid && !order.isDelivered && (order.paymentMethod === "Cash On Delivery") &&
-            <div>
-              <button
-                type="button"
-                className="bg-pink-500 text-white w-full py-2"
-                onClick={cashOnDeliverHandler}
-              >
-                Recieved Cash and Delivered
-              </button>
-            </div>}
+          {userInfo &&
+            userInfo.role === "vendor" &&
+            order.isPaid &&
+            !order.isDelivered && (
+              <div>
+                <button
+                  type="button"
+                  className="bg-pink-500 text-white w-full py-2"
+                  onClick={deliverHandler}
+                >
+                  Mark As Delivered
+                </button>
+              </div>
+            )}
           {userInfo && order.isPaid && order.isDelivered && (
             <Message variant="success">
               Delievered on {order.deliveredAt}
@@ -249,7 +218,7 @@ const Order = () => {
           )}
         </div>
       </div>
-    </div >
+    </div>
   );
 };
 
