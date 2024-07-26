@@ -64,14 +64,7 @@ const createUser = asyncHandler(async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    const newUser = new User({ username, email, password: hashedPassword, role });
 
-    try {
-        await newUser.save();
-        createToken(res, newUser._id);
-    } catch (error) {
-        console.error(error);
-    }
 });
 
 const verifyOtp = asyncHandler(async (req, res) => {
@@ -86,19 +79,26 @@ const verifyOtp = asyncHandler(async (req, res) => {
             const salt = await bcrypt.genSalt(10);
             const hashedPassword = await bcrypt.hash(password, salt);
 
-            const newUser = new User({ username, email, password: hashedPassword, role });
-
             try {
-                await newUser.save();
-                createToken(res, newUser._id);
 
-                res.status(201).json({
-                    _id: newUser._id,
-                    username: newUser.username,
-                    email: newUser.email,
-                    role: newUser.role,
-                });
+
+                const newUser = new User({ username, email, password: hashedPassword, role });
+
+                try {
+                    await newUser.save();
+                    createToken(res, newUser._id);
+
+                    res.status(201).json({
+                        _id: newUser._id,
+                        username: newUser.username,
+                        email: newUser.email,
+                        role: newUser.role,
+                    });
+                } catch (error) {
+                    console.error(error);
+                }
             } catch (error) {
+                console.log(error)
                 res.status(400).json({ message: error.message });
             }
         } else {

@@ -15,19 +15,24 @@ const AllProducts = () => {
     return <div>Error loading products</div>;
   }
 
+  let displayProducts = products
   const filteredProducts = products.filter((product) => {
     return product.vendor === userInfo._id;
   });
+
+  if (userInfo.role === "vendor") {
+    displayProducts = filteredProducts;
+  }
   return (
     <>
       <div className="container mx-[9rem]">
         <div className="flex flex-col  md:flex-row">
           <div className="p-3">
             <div className="ml-[2rem] text-xl font-bold h-12">
-              All Products ({filteredProducts.length})
+              All Products ({displayProducts.length})
             </div>
             <div className="flex-row flex-wrap justify-around items-center pl-20">
-              {filteredProducts.map((product) => (
+              {displayProducts.map((product) => (
                 <div className="flex mt-6" key={product._id}>
                   <img
                     src={product.image}
