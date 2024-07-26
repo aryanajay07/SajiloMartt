@@ -1,14 +1,7 @@
-<<<<<<< Updated upstream
-import { apiSlice } from "./apiSlice";
-import { USERS_URL } from "../constants";
-=======
 
-
-  export default UserApiSlice;
   import { apiSlice } from './apiSlice';
 import { USERS_URL } from '../constants';
 
->>>>>>> Stashed changes
 
 export const userApiSlice = apiSlice.injectEndpoints({
 	endpoints: (builder) => ({

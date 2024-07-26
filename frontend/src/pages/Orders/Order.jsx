@@ -99,14 +99,18 @@ const Order = () => {
   ) : error ? (
     <Message variant="danger">Cannot find order</Message>
   ) : (
+<<<<<<< HEAD
+    <div className="container flex flex-col  md:flex-row">
+=======
     <div className="container mx-auto flex flex-col ml-[10rem] md:flex-row">
+>>>>>>> 2ae04130f618a15da1397b55439ef411a3975675
       <div className="md:w-2/3 pr-4">
         <div className="border gray-300 mt-5 pb-4 mb-5">
           {order.orderItems.length === 0 ? (
             <Message>Order is empty</Message>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-[80%]">
+            <div className="overflow-x-auto pl-10 ">
+              <table className="w-[80%] ">
                 <thead className="border-b-2">
                   <tr>
                     <th className="p-2">Image</th>
