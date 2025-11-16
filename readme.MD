@@ -41,7 +41,7 @@ A full-stack e-commerce application built with Node.js, Express, React, and Vite
 │   ├── src/               # Source code
 │   ├── public/            # Static assets
 │   └── vite.config.js     # Vite configuration
-├── uploads/               # User-uploaded files
+├── uploads/               # User uploaded files
 └── .env                   # Environment variables
 ```
 
