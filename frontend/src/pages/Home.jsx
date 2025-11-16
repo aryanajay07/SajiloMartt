@@ -10,6 +10,15 @@ const Home = () => {
   const { keyword } = useParams();
   const { data, isLoading, isError } = useGetProductsQuery({ keyword });
 
+
+  if (!data || !data.products) {
+    return <div>No products found</div>;
+  }
+
+  // Sort products by salesCount in descending order
+  const sortedProducts = data.products.slice().sort((a, b) => b.salesCount - a.salesCount)
+  let displayProducts = sortedProducts
+
   return (
     <div className="min-h-screen container mx-auto flex flex-col">
       <div
@@ -53,16 +62,10 @@ const Home = () => {
           <div className="container mx-auto px-4 py-8">
             <div className="flex justify-between items-center mb-8">
               <h1 className="text-4xl text-white font-bold">Top Products</h1>
-              <Link
-                to="/shop"
-                classN ame="bg-pink-600 text-white font-bold rounded-full py-2 px-10 shadow-lg transform transition-transform hover:scale-105"
-              >
-                Shop
-              </Link>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {data.products.map((product) => (
+              {displayProducts.map((product) => (
                 <Product key={product._id} product={product} />
               ))}
             </div>

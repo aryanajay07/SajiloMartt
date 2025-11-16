@@ -26,8 +26,12 @@ const OrderList = () => {
     }
   };
 
-  const filteredOrders = orders?.filter((order) =>
+  const ordersArray = Array.isArray(orders) ? [...orders] : [];
+
+  const sortedOrders = ordersArray.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+  const filteredOrders = sortedOrders?.filter((order) =>
     order.orderItems.some((item) => item.product && item.product.vendor === userInfo._id)
+
   ) || [];
 
   return (

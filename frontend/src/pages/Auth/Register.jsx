@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../components/Loader";
-import { useRegisterMutation, useVerifyOtpMutation } from "../../redux/api/usersApiSlice";
+import { useRegisterMutation, useVerifyOtpMutation, useSendOtpMutation } from "../../redux/api/usersApiSlice";
 import { setCredentials } from "../../redux/Features/auth/authSlice";
 import { toast } from "react-toastify";
 
@@ -22,6 +22,7 @@ const Register = () => {
 
   const [register, { isLoading: isRegisterLoading }] = useRegisterMutation();
   const [verifyOtp, { isLoading: isVerifyLoading }] = useVerifyOtpMutation();
+  const [sendOtp, { isLoading: isSendOtpLoading }] = useSendOtpMutation();
 
   const { userInfo } = useSelector((state) => state.auth);
 
@@ -42,6 +43,7 @@ const Register = () => {
       toast.error("Passwords do not match");
     } else {
       try {
+        // Call the register mutation
         const res = await register({
           username,
           email,
@@ -49,6 +51,7 @@ const Register = () => {
           role,
         }).unwrap();
         setOtpToken(res.otpToken);
+        console.log("otp:", otp)
         setOtpSent(true);
         toast.success("OTP sent to your email address");
       } catch (err) {
@@ -62,6 +65,7 @@ const Register = () => {
     e.preventDefault();
 
     try {
+      // Call the verifyOtp mutation
       const res = await verifyOtp({
         otp,
         otpToken,
@@ -149,7 +153,7 @@ const Register = () => {
               <input
                 type="password"
                 id="password"
-                className="mt-1 p-2 text-black border rounded w-full"
+                className="mt-1 p-2 text-red-500 border rounded w-full"
                 placeholder="Enter password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -205,7 +209,7 @@ const Register = () => {
         )}
 
         <div className="mt-4">
-          <p className="text-black">
+          <p className=" ">
             Already have an account?{" "}
             <Link
               to={redirect ? `/login?redirect=${redirect}` : "/login"}

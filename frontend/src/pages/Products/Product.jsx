@@ -9,14 +9,14 @@ const Product = ({ product }) => {
           <img
             src={product.image}
             alt={product.name}
-            className="w-96  h-48 object-cover rounded overflow-hidden"
+            className="w-96  h-64 object-cover  rounded overflow-hidden"
           />
           <HeartIcon product={product} />
         </div>
 
         <div className="p-4  ">
           <h2 className="flex-col justify-center items-center">
-            <div className="text-lg text-white">{product.name}</div>
+            <div className="text-lg">{product.name}</div>
 
             <span className="text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-pink-900 dark:text-pink-300">
               Rs. {product.price}

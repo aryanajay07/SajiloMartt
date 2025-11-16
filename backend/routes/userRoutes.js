@@ -24,6 +24,7 @@ router
     .get(authenticate, authorizeVendorOrAdmin, getAllUsers);
 
 router.post("/auth", loginUser);
+router.post("/register", createUser);
 router.post("/logout", logoutCurrentUser);
 
 router.post('/verify-otp', verifyOtp);
@@ -34,7 +35,7 @@ router
     .get(authenticate, getCurrentUserProfile)
     .put(authenticate, updateCurrentUserProfile);
 
-// ADMIN ROUTES 👇
+// ADMIN ROUTES 
 router
     .route("/:id")
     .delete(authenticate, authorizeAdmin, deleteUserById)

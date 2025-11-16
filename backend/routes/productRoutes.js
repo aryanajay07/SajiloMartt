@@ -15,19 +15,16 @@ import {
     fetchNewProducts,
     filterProducts,
     searchProducts,
-    removeAllProduct
 } from "../controllers/productController.js";
 import { authenticate, authorizeAdmin, authorizeVendor, authorizeVendorOrAdmin } from "../middlewares/authMiddleware.js";
 import checkId from "../middlewares/checkId.js";
 
 router
     .route("/")
-    .get(formidable(), fetchProducts)
-    .post(authenticate, authorizeVendor, formidable(), addProduct)
-    .delete(authenticate, authorizeVendor, formidable(), removeAllProduct);
+    .get(fetchProducts)
+    .post(authenticate, authorizeVendor, formidable(), addProduct);
 
-
-router.route("/allproducts").get(authenticate, authorizeVendor, fetchAllProducts);
+router.route("/allproducts").get(fetchAllProducts);
 router.route("/:id/reviews").post(authenticate, checkId, addProductReview);
 
 router.get("/top", fetchTopProducts);

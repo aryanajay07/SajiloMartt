@@ -52,7 +52,7 @@ const createUser = asyncHandler(async (req, res) => {
         secret: process.env.OTP_SECRET,
         encoding: 'base32',
     });
-    console.log(otp);
+    console.log("otp", otp);
 
     const otpToken = jwt.sign({ email, otp }, process.env.JWT_SECRET, { expiresIn: '10m' });
 
@@ -64,14 +64,7 @@ const createUser = asyncHandler(async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    const newUser = new User({ username, email, password: hashedPassword, role });
 
-    try {
-        await newUser.save();
-        createToken(res, newUser._id);
-    } catch (error) {
-        console.error(error);
-    }
 });
 
 const verifyOtp = asyncHandler(async (req, res) => {
@@ -79,28 +72,37 @@ const verifyOtp = asyncHandler(async (req, res) => {
 
     try {
         const decoded = jwt.verify(otpToken, process.env.JWT_SECRET);
+        console.log("decoded otp", decoded.otp)
+        console.log("actual otp", otp)
 
         if (decoded.otp === otp) {
             const salt = await bcrypt.genSalt(10);
             const hashedPassword = await bcrypt.hash(password, salt);
 
-            const newUser = new User({ username, email, password: hashedPassword, role });
-
             try {
-                await newUser.save();
-                createToken(res, newUser._id);
 
-                res.status(201).json({
-                    _id: newUser._id,
-                    username: newUser.username,
-                    email: newUser.email,
-                    role: newUser.role,
-                });
+
+                const newUser = new User({ username, email, password: hashedPassword, role });
+
+                try {
+                    await newUser.save();
+                    createToken(res, newUser._id);
+
+                    res.status(201).json({
+                        _id: newUser._id,
+                        username: newUser.username,
+                        email: newUser.email,
+                        role: newUser.role,
+                    });
+                } catch (error) {
+                    console.error(error);
+                }
             } catch (error) {
-                res.status(400).json({ message: "Invalid OTP." });
+                console.log(error)
+                res.status(400).json({ message: error.message });
             }
         } else {
-            res.status(400).send("Invalid OTP.");
+            res.status(400).send("Invalid OTP please try again.");
         }
     } catch (error) {
         res.status(400).json({ message: "Invalid or expired OTP token." });
