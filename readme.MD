@@ -92,7 +92,7 @@ VITE_API_URL=http://localhost:5000
 **Backend:**
 ```bash
 cd backend
-npm rundev
+npm run dev
 ```
 
 **Frontend:**
